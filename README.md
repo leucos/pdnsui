@@ -57,6 +57,11 @@ _Note_ : you don't need to have powerdns on the machine to try things out.
 However, advanced features (slave notifications, dns based specs) will
 require a locally installed powerdns.
 
+You can run tests just by issuing `rake`. Note that you really should
+setup a specific database to run spec against (see ``when :spec`` in
+config/database.rb). While not doing so should be safe for your db,
+several specs will probably fail.
+
 Contributing to pdnsui
 ----------------------
  
@@ -65,11 +70,12 @@ Contributing to pdnsui
 * Check out the issue tracker to make sure someone already hasn't
   requested it and/or contributed it
 * Fork the project
-* Start a feature/bugfix branch
-* Commit and push until you are happy with your contribution
+* Init git flow (if you use it, or just start a feature/bugfix branch
+  (prefixed with feature/)
+* _write tests_, doc, commit and push until you are happy with your contribution
 * Please try not to mess with the Rakefile, version, or history. If you
   want to have your own version, or is otherwise necessary, that is
-fine, but please isolate to its own commit so I can cherry-pick around
+fine, but please isolate to its own commit so we can cherry-pick around
 it.
 
 Credits

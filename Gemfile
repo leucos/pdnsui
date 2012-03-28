@@ -9,12 +9,12 @@ gem 'mysql2'
 gem 'thin'
 
 group :development do
-    gem "rspec"
+    gem 'rspec'
     gem 'bacon'
     gem 'yard'
     gem 'bundler'
     gem 'simplecov'
     gem 'bluecloth'
     gem 'rack-test'
-    gem 'awesome_print'
+    gem 'hpricot'
 end
