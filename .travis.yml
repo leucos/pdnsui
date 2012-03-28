@@ -7,8 +7,9 @@ before_install:
   - gem update --system
 
 before_script:
-  - mysql -e 'create database powerdns-spec;'
-  - mysql powerdns-spec < misc/powerdns.mysql
+  - mysql -e 'create database powerdns_spec;'
+  - mysql powerdns_spec < misc/powerdns.mysql
+  - cp config/database.rb.travis config/database.rb
 
 #script: "bundle exec rake"
 
