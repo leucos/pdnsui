@@ -11,7 +11,7 @@ interface out there sometimes do), since many people are using invalid
 TLDs for internal naming schemes.
 
 ![pdnsui]
-(pdnsui/raw/master/misc/screenshot.png)
+(https://github.com/leucos/pdnsui/raw/master/misc/screenshot.png)
 
 _This software is *very* alpha. You definitively shouldn't use it on
 production servers yet ! Don't come to me if your production DNS
