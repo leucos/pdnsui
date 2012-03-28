@@ -2,7 +2,7 @@ pdnsui
 ======
 
 [![Build
-Status](https://secure.travis-ci.org/leucos/pdnsui.png?branch=master)](http://travis-ci.org/earzue/pdnsui)
+Status](https://secure.travis-ci.org/leucos/pdnsui.png?branch=master)](http://travis-ci.org/leucos/pdnsui)
 
 GitHub: https://github.com/leucos/pdnsui/
 
