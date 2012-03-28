@@ -1,8 +1,6 @@
 source :rubygems
 
-gem "trollop"
-gem "mysql"
-
+gem 'rake'
 gem 'ramaze'
 gem 'sequel'
 gem 'bacon'
