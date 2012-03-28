@@ -1,8 +1,5 @@
 require 'simplecov'
 
-SimpleCov.command_name 'bacon'
-SimpleCov.start
-
 # Load the existing files
 Dir.glob('spec/**/*.rb').each do |spec_file|
   unless File.basename(spec_file) == 'init.rb' and File.basename(spec_file) == 'helper.rb'

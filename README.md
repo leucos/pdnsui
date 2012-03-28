@@ -8,6 +8,13 @@ GitHub: https://github.com/leucos/pdnsui/
 
 A PowerDNS UI ThatDoesntSuck™ (well, hopefully)
 
+The ultimate goal is to produce a slick web interface to PowerDNS that
+will let you do add/remove/update domains and records in your PowerDNs
+database. Will PowerDNS will try to enforce RFCs at the record level, I
+*wont* ever prevent you from using invalid TLDs (like other PowerDNS
+web interface do), since many people are using invalid TLDs for internal
+naming schemes.
+
 ![pdnsui]
 (pdnsui/raw/master/misc/screenshot.png)
 
@@ -57,10 +64,29 @@ _Note_ : you don't need to have powerdns on the machine to try things out.
 However, advanced features (slave notifications, dns based specs) will
 require a locally installed powerdns.
 
-You can run tests just by issuing `rake`. Note that you really should
-setup a specific database to run spec against (see ``when :spec`` in
-config/database.rb). While not doing so should be safe for your db,
-several specs will probably fail.
+Specs (a.k.a. Tests)
+--------------------
+
+You can run specs (bacon flavor) just by issuing `rake`. Note that you
+really should setup a specific database to run spec against (see ``when
+:spec`` in config/database.rb). While not doing so should be safe for
+your db, several specs will probably fail.
+
+If you want code coverage, set the environment variable ``COVERAGE`` :
+
+```bash
+COVERAGE=true rake
+```
+
+Coverage will be generated in the ``coverage`` folder, thanks to
+[SimpleCov](https://github.com/colszowka/simplecov).
+
+If you don't want bacon to spit out backtrace, just set a ``BACON_MUTE``
+environment variable :
+
+```bash
+BACON_MUTE=yup rake
+```
 
 Contributing to pdnsui
 ----------------------
@@ -80,6 +106,7 @@ it.
 
 Credits
 -------
+
 - PDNSui is built with the awesome [Ramaze
   Framework](https://github.com/Ramaze/ramaze) an [Sequel
 ORM](https://github.com/jeremyevans/sequel). Thanks to Sequel's author
