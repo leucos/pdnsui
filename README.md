@@ -9,7 +9,7 @@ GitHub: https://github.com/leucos/pdnsui/
 A PowerDNS UI ThatDoesntSuck™ (well, hopefully)
 
 ![pdnsui]
-(raw/master/misc/screenshot.png)
+(pdnsui/raw/master/misc/screenshot.png)
 
 _This softwre is *very* alpha. You definitively shouldn't use it on
 production servers yet !_
