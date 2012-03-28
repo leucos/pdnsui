@@ -2,14 +2,14 @@ pdnsui
 ======
 
 [![Build
-Status](https://secure.travis-ci.org/earzur/pdnsui.png?branch=master)](http://travis-ci.org/earzue/pdnsui)
+Status](https://secure.travis-ci.org/leucos/pdnsui.png?branch=master)](http://travis-ci.org/earzue/pdnsui)
 
-GitHub: https://github.com/earzur/pdnsui/
+GitHub: https://github.com/leucos/pdnsui/
 
 A PowerDNS UI ThatDoesntSuck™ (well, hopefully)
 
 ![pdnsui]
-(https://raw.github.com/earzur/pdnsui/develop/misc/powerdns.mysql)
+(raw/master/misc/screenshot.png)
 
 _This softwre is *very* alpha. You definitively shouldn't use it on
 production servers yet !_
@@ -20,7 +20,7 @@ Installing
 * Clone the repository
 
 ```bash
-git clone https://leucos@github.com/earzur/pdnsui.git
+git clone https://leucos@github.com/leucos/pdnsui.git
 cd pdnsui
 git checkout develop
 ```
