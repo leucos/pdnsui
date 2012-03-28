@@ -1,28 +1,26 @@
-pdnsui
+pdnsui [![Build Status](https://secure.travis-ci.org/leucos/pdnsui.png?branch=master)](http://travis-ci.org/leucos/pdnsui)
 ======
 
-[![Build
-Status](https://secure.travis-ci.org/leucos/pdnsui.png?branch=master)](http://travis-ci.org/leucos/pdnsui)
-
-GitHub: https://github.com/leucos/pdnsui/
-
-A PowerDNS UI ThatDoesntSuck™ (well, hopefully)
+*A PowerDNS UI ThatDoesntSuck™ (well, hopefully)*
 
 The ultimate goal is to produce a slick web interface to PowerDNS that
 will let you do add/remove/update domains and records in your PowerDNs
 database. Will PowerDNS will try to enforce RFCs at the record level, I
-*wont* ever prevent you from using invalid TLDs (like other PowerDNS
-web interface do), since many people are using invalid TLDs for internal
-naming schemes.
+*won't* ever prevent you from using invalid TLDs (like some PowerDNS web
+interface out there sometimes do), since many people are using invalid
+TLDs for internal naming schemes.
 
 ![pdnsui]
 (pdnsui/raw/master/misc/screenshot.png)
 
-_This softwre is *very* alpha. You definitively shouldn't use it on
-production servers yet !_
+_This software is *very* alpha. You definitively shouldn't use it on
+production servers yet ! Don't come to me if your production DNS
+database is empty !_
 
 Installing
 ----------
+
+* Have a ride to the [GitHub: https://github.com/leucos/pdnsui/](GitHub page) and check the README.md
 
 * Clone the repository
 
