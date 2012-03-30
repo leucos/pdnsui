@@ -2,6 +2,11 @@
 # Environment settings
 #
 
+module PDNSui
+  URL="https://github.com/leucos/pdnsui/"
+  VERSION="0.0.0"
+end
+
 Ramaze.middleware :spec do |mode|
   puts "Middlewares for spec"
   mode.use Rack::Lint

@@ -54,7 +54,8 @@ class Domains < MainController
       @domain.update(data)
     end
 
-    redirect Domains.r(:records, @domain.id)
+    redirect_referrer
+    # redirect Domains.r(:index, @domain.id)
   end
 
   def delete(id=nil)

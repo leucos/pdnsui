@@ -6,7 +6,10 @@ gem 'sequel'
 gem 'bacon'
 gem 'sqlite3'
 gem 'mysql2'
+gem 'whois'
+gem 'json'
 gem 'thin'
+gem 'dnsruby'
 
 group :development do
     gem 'rspec'

@@ -1,25 +1,29 @@
-<p>Hey ! Just try to go to the <a href="#{Domains.route}">domains controller</a></p> 
+<div class="hero-unit">
+  <h1>PDNSui</h1>
+  <p>PowerDNS web interface</p>
+  <p>version #{PDNSui::VERSION}</p>
+  <p>
+
+  <a class="btn btn-primary btn-large" href="#{Domains.r()}">
+    Jump to the domains
+  </a>
+  <a class="btn btn-primary btn-large" href="#{PDNSui::URL}">
+    Doc on GitHub
+  </a>
+  </p>
+</div>
 
 <p>
-    Congratulations, Ramaze is running fine and you can start working on your application.
+Congratulations, you made it so far ! Just try to go to the <a href="#{Domains.route}">domains controller</a>
+</p> 
+
+<p>
+  Note that this software is very alpha, and might break your zones, your server, your marriage, whatever.
 </p>
 
 <p>
-    You can play around with this prototype by changing the following:
+  This is built using Ramaze and Sequel
 </p>
-
-<ul>
-    <li>
-        <code>view/index.xhtml</code>: the content of this page.
-    </li>
-    <li>
-        <code>layout/default.xhtml</code>: the layout for this page.
-    </li>
-    <li>
-        <code>controller/main.rb</code>: the controller responsible for server this page.
-    </li>
-</ul>
-
 <p>
     For more information, check out <a href="http://ramaze.net">ramaze.net</a> and
     <a href="http://ramaze.net/documentation/index.html">the documentation</a>.

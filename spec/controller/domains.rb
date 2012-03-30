@@ -50,7 +50,7 @@ describe "The Domains controller" do
   should 'show records page' do
     get("/domains/records/#{@domain.id}").status.should == 200
     last_response['Content-Type'].should == 'text/html'
-    last_response.should =~ /<h1>0.example.com<\/h1>/
+    last_response.should =~ /<h1>\s+0.example.com/
   end
 
   should 'show records page in ascending order' do
