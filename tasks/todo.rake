@@ -2,7 +2,7 @@ desc "show a todolist from all the TODO tags in the source"
 task :todo do
   yellow = "\e[33m%s\e[0m"
 
-  Dir.glob('{controller,modem,layout,view,spec}/**/*.{rb,xhtml}') do |file|
+  Dir.glob('{controller,model,layout,view,spec,helper}/**/*.{rb,xhtml}') do |file|
     lastline = todo = comment = long_comment = false
 
     File.readlines(file).each_with_index do |line, lineno|
