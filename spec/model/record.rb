@@ -6,7 +6,7 @@ describe "A Record" do
   before do
     clean = Domain[:name => 'example.com']
     clean.destroy unless clean.nil?
-    
+
     @domain = Domain.create(:name => 'example.com', :type => 'MASTER')
     @record = Record.create(:domain_id => @domain.id, :name => 'www.example.com', :type => 'A',
                      :content => '10.10.10.10', :ttl => 1234)
@@ -29,7 +29,7 @@ describe "A Record" do
     @record.domain_id.should.equal @domain.id
   end 
 
-  should 'type SOA should be unique for a domain' do
+  should 'have a unique SOA type record for a domain' do
     should.raise(Sequel::ValidationFailed) do
       Record.create(:domain_id => @domain.id, :name => 'example.com', :type => 'SOA',
                     :content => 'ns1.exaple.com postmaster.example.com 2009010203 7200 3600 4800 86400',

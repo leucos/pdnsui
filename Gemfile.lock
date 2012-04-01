@@ -1,14 +1,16 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    awesome_print (1.0.2)
     bacon (1.1.0)
     bluecloth (2.2.0)
     daemons (1.1.8)
     diff-lcs (1.1.3)
+    dnsruby (1.53)
     eventmachine (0.12.10)
+    hpricot (0.8.6)
     innate (2012.03)
       rack (~> 1.4.1)
+    json (1.6.6)
     multi_json (1.1.0)
     mysql2 (0.3.11)
     rack (1.4.1)
@@ -35,16 +37,19 @@ GEM
       daemons (>= 1.0.9)
       eventmachine (>= 0.12.6)
       rack (>= 1.0.0)
+    whois (2.4.0)
     yard (0.7.5)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  awesome_print
   bacon
   bluecloth
   bundler
+  dnsruby
+  hpricot
+  json
   mysql2
   rack-test
   rake
@@ -54,4 +59,5 @@ DEPENDENCIES
   simplecov
   sqlite3
   thin
+  whois
   yard

@@ -1,6 +1,7 @@
 class Record < Sequel::Model
   many_to_one :domain
   plugin :validation_helpers
+  plugin :composition
 
   # We can only have one SOA per domain
   # Also, we can not have exactly the same records
@@ -12,24 +13,39 @@ class Record < Sequel::Model
     end
   end
 
-  def serial
-    content.split[2] if type == 'SOA'
+  def bump_serial
+    if type == 'SOA'
+      today = Date.today.strftime("%Y%m%d")
+      serie = self.domain_serial.gsub(/^#{today}/,'')
+
+      case serie
+      when "00".."98"
+        # The serial's date is today, we have to increase last digits
+        serial = "#{today}%02d" % (serie.to_i+1)
+      when "99"
+        raise RangeError, 'Error : serial sequence is already maxed out for today'
+      else
+        # The serial's date is older than today, just create one
+        serial = "#{today}01"
+      end
+      self.domain_serial = serial
+    end
   end
 
-  def refresh
-    content.split[3] if type == 'SOA'
+  SOA_COLUMNS= [ :domain_ns, :domain_email, :domain_serial, :domain_refresh,
+    :domain_retry, :domain_expiry, :domain_minimum ]
+
+  SOA = Struct.new(*SOA_COLUMNS)
+  SOA_COMPOSER = proc{SOA.new(*content.split)}
+  SOA_DECOMPOSER = proc{self.content = SOA_COLUMNS.map{|c| send(c)}.join(' ')}
+  SOA_COLUMNS.each do |c|
+    define_method(c){soa.send(c)}
+    e = :"#{c}="
+    define_method(e){|v| soa.send(e, v)}
   end
 
-  def retry
-    content.split[4] if type == 'SOA'
-  end
+  composition :soa,
+      :composer => SOA_COMPOSER,
+      :decomposer => SOA_DECOMPOSER
 
-  def expiry
-    content.split[5] if type == 'SOA'
-  end
-
-  def minimum
-    content.split[6] if type == 'SOA'
-  end
 end
-

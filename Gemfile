@@ -6,15 +6,18 @@ gem 'sequel'
 gem 'bacon'
 gem 'sqlite3'
 gem 'mysql2'
+gem 'whois'
+gem 'json'
 gem 'thin'
+gem 'dnsruby'
 
 group :development do
-    gem "rspec"
+    gem 'rspec'
     gem 'bacon'
     gem 'yard'
     gem 'bundler'
     gem 'simplecov'
     gem 'bluecloth'
     gem 'rack-test'
-    gem 'awesome_print'
+    gem 'hpricot'
 end
