@@ -5,7 +5,7 @@ pdnsui [![Build Status](https://secure.travis-ci.org/leucos/pdnsui.png?branch=ma
 
 The ultimate goal is to produce a slick web interface to PowerDNS that
 will let you do add/remove/update domains and records in your PowerDNs
-database. Will PowerDNS will try to enforce RFCs at the record level, I
+database. While PowerDNS will try to enforce RFCs at the record level, it
 *won't* ever prevent you from using invalid TLDs (like some PowerDNS web
 interface out there sometimes do), since many people are using invalid
 TLDs for internal naming schemes.
@@ -15,7 +15,7 @@ TLDs for internal naming schemes.
 
 _This software is *very* alpha. You definitively shouldn't use it on
 production servers yet ! Don't come to me if your production DNS
-database is empty !_
+database is trashed !_
 
 Installing
 ----------
@@ -58,7 +58,7 @@ MODE=DEV ramaze start -s thin
 * Point your browser to: [http://localhost:7000/] (http://localhost:7000/)
 * Enjoy
 
-_Note_ : you don't need to have powerdns on the machine to try things out.
+_Note_ : you don't need to have powerdns on the machine to try this out.
 However, advanced features (slave notifications, dns based specs) will
 require a locally installed powerdns.
 
@@ -73,7 +73,7 @@ your db, several specs will probably fail.
 If you want code coverage, set the environment variable ``COVERAGE`` :
 
 ```bash
-COVERAGE=true rake
+COVERAGE=ohyesplease rake
 ```
 
 Coverage will be generated in the ``coverage`` folder, thanks to
@@ -86,21 +86,28 @@ environment variable :
 BACON_MUTE=yup rake
 ```
 
+Planned features
+----------------
+
+* Write the _Planned Features_ section in README
+
 Contributing to pdnsui
 ----------------------
- 
+
 * Check out the latest master to make sure the feature hasn't been
   implemented or the bug hasn't been fixed yet
 * Check out the issue tracker to make sure someone already hasn't
   requested it and/or contributed it
 * Fork the project
-* Init git flow (if you use it, or just start a feature/bugfix branch
-  (prefixed with feature/)
+* Use a specific branch for your changes (one bonus point if it's prefixed with 'feature/')
 * _write tests_, doc, commit and push until you are happy with your contribution
-* Please try not to mess with the Rakefile, version, or history. If you
-  want to have your own version, or is otherwise necessary, that is
-fine, but please isolate to its own commit so we can cherry-pick around
-it.
+* Please try not to mess with the Rakefile, version, or history
+
+License
+-------
+
+This is released [WTFPLv2](http://sam.zoy.org/wtfpl/), and comes without
+any warranty.
 
 Credits
 -------
