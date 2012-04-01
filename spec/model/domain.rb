@@ -154,6 +154,29 @@ describe "A Domain" do
     @soa.domain_minimum.should.equal "44444"
   end
 
+  # serial bumping specs
+  should 'be able to bump an old serial' do
+    @domain.soa.domain_serial = "%s01" % (Date.today-1).strftime("%Y%m%d")
+    today = Date.today.strftime("%Y%m%d")
+    @domain.soa.bump_serial
+    @domain.soa.domain_serial.should == "%s01" % today
+  end
+
+  should "be able to bump today's serial" do
+    today = Date.today.strftime("%Y%m%d")
+    @domain.soa.domain_serial = "%s01" % today
+    @domain.soa.bump_serial
+    @domain.soa.domain_serial.should == "%s02" % today
+  end
+
+  should "top bumping serials if todays's count is 99" do
+    today = Date.today.strftime("%Y%m%d")
+    @domain.soa.domain_serial = "%s99" % today
+    should.raise(RangeError) do
+      @domain.soa.bump_serial
+    end
+  end
+
   # If the domain switches from slave to master, we have to remove master in it's row
   should 'remove master if it\'s not a slave' do
     Domain.filter(:name => 'rmiinas.example.org').destroy

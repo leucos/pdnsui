@@ -13,6 +13,25 @@ class Record < Sequel::Model
     end
   end
 
+  def bump_serial
+    if type == 'SOA'
+      today = Date.today.strftime("%Y%m%d")
+      serie = self.domain_serial.gsub(/^#{today}/,'')
+
+      case serie
+      when "00".."98"
+        # The serial's date is today, we have to increase last digits
+        serial = "#{today}%02d" % (serie.to_i+1)
+      when "99"
+        raise RangeError, 'Error : serial sequence is already maxed out for today'
+      else
+        # The serial's date is older than today, just create one
+        serial = "#{today}01"
+      end
+      self.domain_serial = serial
+    end
+  end
+
   SOA_COLUMNS= [ :domain_ns, :domain_email, :domain_serial, :domain_refresh,
     :domain_retry, :domain_expiry, :domain_minimum ]
 

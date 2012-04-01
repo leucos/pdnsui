@@ -4,6 +4,7 @@
 class Domains < MainController
 
   before_all do
+    # Context helps the default layout highlighting the good entry in the navbar
     @context=:domains
   end
 
@@ -94,12 +95,30 @@ class Domains < MainController
     od = :asc unless :desc == od
 
     if (:desc == od) then
-      Ramaze::Log.info("Sorting by #{sb} desc")
       @records = paginate(@domain.records_dataset.order(sb).reverse)
     else
-      Ramaze::Log.info("Sorting by #{sb} asc")
       @records = paginate(@domain.records_dataset.order(sb))
     end
   end
 
+  def bump_serial(id=nil)
+    d = Domain[id]
+    if id.nil?
+      flash[:error] = "Ooops, you didn't ask me which domain you wanted"
+    elsif d.nil?
+      flash[:error] = "Sorry, the domain ID '%s' doesn\'t exist" % id
+    else
+      begin
+        d.soa.bump_serial
+        d.soa.save
+      rescue Exception => e
+        flash[:error] = "Unable to bump SOA for %s : %s" % [ d.name, e.message ]
+      else
+        flash[:success] = "Serial for domain %s bumped to %s" % [ d.name, d.soa.domain_serial ]
+      end
+    end
+    redirect_referrer
+  end
 end
+
+

@@ -10,7 +10,7 @@
   <?r if @domain.soa.nil? ?>
   <p><span class="label label-warning">Serial unknown</span></p>
   <?r else ?>
-  <p><span class="label label-info">Serial ##{@domain.soa.serial}</span></p>
+  <p><span class="label label-info">Serial ##{@domain.soa.domain_serial}</span></p>
   <?r end ?>
 
 
@@ -19,7 +19,7 @@
     <a class="btn btn" href="#" id="new-record"><i class="icon-plus-sign"></i> Add record</a>
   </div>
   <div class="btn-group">
-    <a class="btn btn-warning disabled" href="#"><i class="icon-step-forward icon-white"></i> Bump SOA</a>
+    <a class="btn btn-warning" href="#{Domains.r(:bump_serial, @domain.id)}"><i class="icon-step-forward icon-white"></i> Bump Serial</a>
     <a class="btn btn disabled" href="#"><i class="icon-refresh"></i> Notify slaves</a>
   </div>
   <div class="btn-group">
