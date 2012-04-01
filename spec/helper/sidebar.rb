@@ -25,7 +25,7 @@ describe "The Sidebar helper" do
   after do
     Domain.filter(:name.like('%.sidebar.example.com')).delete
   end
-  
+
   should 'highlight domain properly' do
     %w{aaaa bbbb cccc}.each do |short|
       doc = Hpricot(get("/sidebar/#{short}.sidebar.example.com").body)
