@@ -90,6 +90,7 @@ Planned features
 ----------------
 
 * Write the _Planned Features_ section in README
+* Find a LICENCE
 
 Contributing to pdnsui
 ----------------------
@@ -116,7 +117,7 @@ Credits
   Framework](https://github.com/Ramaze/ramaze) an [Sequel
 ORM](https://github.com/jeremyevans/sequel). Thanks to Sequel's author
 Jeremy Evans and to all the nice folks in Freenode#ramaze for their
-dedicated help. Bare with me guys ;)
+dedicated help. Bear with me guys ;)
 
 - Layout & CSS: [http://twitter.github.com/bootstrap/]
 (http://twitter.github.com/bootstrap/)
