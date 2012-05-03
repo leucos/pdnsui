@@ -10,6 +10,8 @@ describe "A Record" do
     @domain = Domain.create(:name => 'example.com', :type => 'MASTER')
     @record = Record.create(:domain_id => @domain.id, :name => 'www.example.com', :type => 'A',
                      :content => '10.10.10.10', :ttl => 1234)
+    @record_short = Record.create(:domain_id => @domain.id, :name => 'short', :type => 'A',
+                     :content => '10.10.10.10', :ttl => 1234)
     @soa = Record.create(:domain_id => @domain.id, :name => 'example.com', :type => 'SOA',
                   :content => 'ns0.example.com postmaster.example.com 2006090501 7200 3600 4800 86400',
                   :ttl => 4321)
@@ -17,12 +19,17 @@ describe "A Record" do
 
   after do
     @record.destroy
+    @record_short.destroy
     @soa.destroy
     @domain.destroy
   end
 
   should 'have a name' do
     @record.name.should.not.be.nil
+  end
+
+  should 'expand name and include domain name' do
+    @record_short.name.should.equal 'short.example.com'
   end
 
   should 'have an associated domain' do

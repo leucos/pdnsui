@@ -41,6 +41,27 @@ describe "The Records controller" do
     last_response.should =~ /Entry aaaa updated successfully/
   end
 
+  should 'update record fields properly' do
+    post('/records/save',
+         :domain_id => @domain.id,
+         :record_id => @record.id,
+         :name      => 'abcd',
+         :type      => 'TXT',
+         :content   => 'efgh',
+         :ttl       => 9876,
+         :prio      => 42).status.should == 302
+    last_response['Content-Type'].should == 'text/html'
+    follow_redirect!
+    last_response['Content-Type'].should == 'text/html'
+    last_response.should =~ /Entry abcd updated successfully/
+    @record.reload
+    @record.name.should.equal 'abcd.example.com'
+    @record.type.should.equal 'TXT'
+    @record.content.should.equal 'efgh'
+    @record.ttl.should.equal 9876
+    @record.prio.should.equal 42
+  end
+
   should 'not update a non-existent record' do
     post('/records/save',
          :domain_id => @domain.id,
