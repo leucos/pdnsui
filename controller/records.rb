@@ -23,7 +23,7 @@ class Records < MainController
   # 
   def save
     id   = request.params['record_id']
-    data = request.subset(:domain_id, :name, :content, :type)
+    data = request.subset(:domain_id, :name, :content, :type, :ttl, :prio)
 
     if !id.nil? and !id.empty?
       record = Record[id]
@@ -34,6 +34,8 @@ class Records < MainController
         redirect_referrer
       end
 
+
+      data['name'] = data['name'] + '.' + Domain[data['domain_id']].name
       operation = "update"
     else
       # Create
