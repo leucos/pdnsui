@@ -21,10 +21,10 @@ class Domains < MainController
 
     if (:desc == od) then
       Ramaze::Log.info("Sorting by #{sb} desc")
-      @domains = paginate(Domain.order(sb).reverse.all)
+      @domains = paginate(Domain.order(sb).reverse)
     else
       Ramaze::Log.info("Sorting by #{sb} asc")
-      @domains = paginate(Domain.order(sb).all)
+      @domains = paginate(Domain.order(sb))
     end
   end
 
