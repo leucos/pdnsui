@@ -11,6 +11,11 @@ class Utils < MainController
     redirect_referrer
   end
 
+  def configure
+    flash[:info] = 'This is not implemented yet :('
+    redirect_referrer
+  end
+
   def get_record(domain, type, server="8.8.8.8")
     type= Dnsruby::Types.const_get type
     res = Dnsruby::Resolver.new
