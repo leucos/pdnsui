@@ -18,6 +18,7 @@ class Record < Sequel::Model
     if not self.name.end_with? self.domain.name
       self.name = self.name + '.' + self.domain.name
     end
+    super
   end
 
   def bump_serial
