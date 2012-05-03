@@ -38,7 +38,7 @@ describe "The Records controller" do
     last_response['Content-Type'].should == 'text/html'
     follow_redirect!
     last_response['Content-Type'].should == 'text/html'
-    last_response.should =~ /Entry aaaa.example.com updated successfully/
+    last_response.should =~ /Entry aaaa updated successfully/
   end
 
   should 'not update a non-existent record' do

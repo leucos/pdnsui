@@ -34,8 +34,6 @@ class Records < MainController
         redirect_referrer
       end
 
-
-      data['name'] = data['name'] + '.' + Domain[data['domain_id']].name
       operation = "update"
     else
       # Create

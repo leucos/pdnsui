@@ -13,6 +13,13 @@ class Record < Sequel::Model
     end
   end
 
+  def before_save
+    # We need to check that the domain is appended to the record's name
+    if not self.name.end_with? self.domain.name
+      self.name = self.name + '.' + self.domain.name
+    end
+  end
+
   def bump_serial
     if type == 'SOA'
       today = Date.today.strftime("%Y%m%d")
