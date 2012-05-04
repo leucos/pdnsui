@@ -31,7 +31,7 @@ class Record < Sequel::Model
         # The serial's date is today, we have to increase last digits
         serial = "#{today}%02d" % (serie.to_i+1)
       when "99"
-        raise RangeError, 'Error : serial sequence is already maxed out for today'
+        raise RangeError, 'serial sequence is already maxed out for today'
       else
         # The serial's date is older than today, just create one
         serial = "#{today}01"

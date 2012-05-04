@@ -19,5 +19,5 @@ group :development do
     gem 'simplecov'
     gem 'bluecloth'
     gem 'rack-test'
-    gem 'hpricot'
+    gem 'nokogiri'
 end

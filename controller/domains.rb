@@ -102,20 +102,30 @@ class Domains < MainController
   end
 
   def bump_serial(id=nil)
-    d = Domain[id]
     if id.nil?
       flash[:error] = "Ooops, you didn't ask me which domain you wanted"
-    elsif d.nil?
+      redirect_referrer
+    end
+
+    d = Domain[id]
+    if d.nil?
       flash[:error] = "Sorry, the domain ID '%s' doesn\'t exist" % id
-    else
-      begin
-        d.soa.bump_serial
-        d.soa.save
-      rescue Exception => e
-        flash[:error] = "Unable to bump SOA for %s : %s" % [ d.name, e.message ]
+    end
+
+    # Something went wrong, let's go back
+    redirect_referrer unless flash.empty?
+
+    begin
+      d.soa.bump_serial
+      d.soa.save
+    rescue Exception => e
+      if e.message =~ /undefined method/
+        flash[:error] = "Unable to bump serial for %s : there is no soa record available for this domain" % d.name
       else
-        flash[:success] = "Serial for domain %s bumped to %s" % [ d.name, d.soa.domain_serial ]
+        flash[:error] = "Unable to bump serial for %s : %s" % [ d.name, e.message ]
       end
+    else
+      flash[:success] = "Serial for domain %s bumped to %s" % [ d.name, d.soa.domain_serial ]
     end
     redirect_referrer
   end
