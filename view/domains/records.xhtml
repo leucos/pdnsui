@@ -71,7 +71,6 @@ CNAME records should bring a list or A, AAAA, PTR, ... (should read RFC 1031/218
           <div class="controls">
             <div class="input-append">
               <input class="span2" name="name" id="mod-edit-recordname" size="16" type="text" placeholder="whatever">
-              <span class="add-on">#{@domain.name}</span>
             </div>
             <span class="help-inline" id="in-recordhelp">Type your record name</span>
           </div>
@@ -102,7 +101,6 @@ CNAME records should bring a list or A, AAAA, PTR, ... (should read RFC 1031/218
           <div class="controls">
             <div class="input-append">
               <input class="span2" name="content" id="mod-edit-recordcontent" size="16" type="text" placeholder="whatever">
-              <span class="add-on">#{@domain.name}</span>
             </div>
             <span class="help-inline">Type you record content</span>
           </div>
@@ -122,10 +120,10 @@ CNAME records should bring a list or A, AAAA, PTR, ... (should read RFC 1031/218
 
         <!-- Record Priority -->
         <div class="control-group">
-          <label class="control-label" for="priority">Priority</label>
+          <label class="control-label" for="prio">Priority</label>
           <div class="controls">
             <div class="input-append">
-              <input class="span2" name="priority" id="mod-edit-recordpriority" size="16" type="text" placeholder="10">
+              <input class="span2" name="prio" id="mod-edit-recordprio" size="16" type="text" placeholder="10">
               <!-- <span class="add-on">#{@domain.name}</span> -->
             </div>
             <span class="help-inline">Type a priority (lower numbers give higher priority)</span>
@@ -228,6 +226,8 @@ CNAME records should bring a list or A, AAAA, PTR, ... (should read RFC 1031/218
               $('#mod-edit-recordname').attr("value","#{record.name}");
               $("#mod-edit-recordtype option[value='#{record.type}']").attr("selected", "selected");
               $('#mod-edit-recordcontent').attr("value", "#{record.content}");
+              $('#mod-edit-recordttl').attr("value", "#{record.ttl}");
+              $('#mod-edit-recordprio').attr("value", "#{record.prio}");
               $('#mod-edit-recordid').attr("value","#{record.id}");
               $('#mod-edit-recordsubmit').attr("href","#");
               $('#mod-edit-recordsubmit').html("Save record");

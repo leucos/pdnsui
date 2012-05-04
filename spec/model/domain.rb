@@ -169,7 +169,7 @@ describe "A Domain" do
     @domain.soa.domain_serial.should == "%s02" % today
   end
 
-  should "top bumping serials if todays's count is 99" do
+  should "stop bumping serials if todays's count is 99" do
     today = Date.today.strftime("%Y%m%d")
     @domain.soa.domain_serial = "%s99" % today
     should.raise(RangeError) do

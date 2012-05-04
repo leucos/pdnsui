@@ -1,4 +1,14 @@
 require_relative '../helper'
+require 'nokogiri'
+
+module Rack
+  class MockResponse
+    def tb_alertbox
+      ab = Nokogiri::HTML(self.body)
+      ab.css("div.alert > p").text
+    end
+  end
+end
 
 describe "The Domains controller" do
   behaves_like :rack_test
@@ -18,7 +28,7 @@ describe "The Domains controller" do
 
   should 'show domains list' do
     get('/domains/').status.should == 200
-    last_response.should =~ /0.controller.domain.spec/
+    last_response.body.should =~ /0.controller.domain.spec/
   end
 
   should 'show domains list in ascending order' do
@@ -29,7 +39,7 @@ describe "The Domains controller" do
     end
     # Test
     get('/domains/', :order => 'asc').status.should == 200
-    last_response.should =~ /0000.sdliao.controller.domain.spec/
+    last_response.body.should =~ /0000.sdliao.controller.domain.spec/
   end
 
   should 'show domains list in descending order' do
@@ -41,13 +51,13 @@ describe "The Domains controller" do
     end
     # Test
     get('/domains/', :order => 'desc').status.should == 200
-    last_response.should =~ /zzzz.sdlido.controller.domain.spec/
+    last_response.body.should =~ /zzzz.sdlido.controller.domain.spec/
   end
 
   should 'show records page' do
     get("/domains/records/#{@domains[0].id}").status.should == 200
     last_response['Content-Type'].should == 'text/html'
-    last_response.should =~ /<h1>\s+0.controller.domain.spec/
+    last_response.body.should =~ /<h1>\s+0.controller.domain.spec/
   end
 
   should 'show records page in ascending order' do
@@ -59,7 +69,7 @@ describe "The Domains controller" do
     # Test
     get("/domains/records/#{@domains[0].id}", :order => 'asc').status.should == 200
     last_response['Content-Type'].should == 'text/html'
-    last_response.should =~ /0000.srpiao.controller.spec/
+    last_response.body.should =~ /0000.srpiao.controller.spec/
   end
 
   should 'show records page in descending order' do
@@ -71,7 +81,7 @@ describe "The Domains controller" do
     # Test
     get("/domains/records/#{@domains[0].id}", :order => 'desc').status.should == 200
     last_response['Content-Type'].should == 'text/html'
-    last_response.should =~ /zzzz.srpido.controller.domain.spec/
+    last_response.body.should =~ /zzzz.srpido.controller.domain.spec/
   end
 
   should 'not show a records for a non-existent domain' do
@@ -79,7 +89,8 @@ describe "The Domains controller" do
     follow_redirect!
     last_response.status.should == 200
     last_response['Content-Type'].should == 'text/html'
-    last_response.should =~ /Sorry, the domain id '99999' doesn't exist/
+#    last_response.tb_alertbox.should.equal "Sorry, the domain id '99999' doesn't exist"
+    last_response.body.should =~ /Sorry, the domain id '99999' doesn't exist/
   end
 
   should 'not show a records for a nil domain' do
@@ -87,7 +98,8 @@ describe "The Domains controller" do
     follow_redirect!
     last_response.status.should == 200
     last_response['Content-Type'].should == 'text/html'
-    last_response.should =~ /Ooops, you didn't ask me which domain you wanted/
+#    last_response.tb_alertbox.should.equal "Ooops, you didn't ask me which domain you wanted"
+    last_response.body.should =~ /Ooops, you didn't ask me which domain you wanted/
   end
 
   should 'add domain' do
@@ -99,7 +111,8 @@ describe "The Domains controller" do
     follow_redirect! 
     last_response.status.should == 200
     last_response['Content-Type'].should == 'text/html'
-    last_response.should =~ /Entry controller.domain.spec/
+
+    last_response.tb_alertbox.should.equal 'Entry controller.domain.spec created successfully'
   end
 
   should 'update domain' do
@@ -114,7 +127,7 @@ describe "The Domains controller" do
          :master => '4.3.2.1').status.should == 302
     follow_redirect!
     last_response.status.should == 200
-    last_response.should =~ /Entry 1.controller.domain.spec updated successfully/
+    last_response.body.should =~ /Entry 1.controller.domain.spec updated successfully/
    end
 
   should 'not update a non-existent domain' do
@@ -125,7 +138,7 @@ describe "The Domains controller" do
          :master => '4.3.2.1').status.should == 302
     follow_redirect!
     last_response.status.should == 200
-    last_response.should =~ /Can not update this domain/
+    last_response.body.should =~ /Can not update this domain/
   end
 
   should 'refuse to add a slave domain without master' do
@@ -136,14 +149,14 @@ describe "The Domains controller" do
     follow_redirect! 
     last_response.status.should == 200
     last_response['Content-Type'].should == 'text/html'
-    last_response.should =~ /Invalid data : master is not present/
+    last_response.body.should =~ /Invalid data : master is not present/
   end
 
   should 'not create or update a nil domain' do
     post('/domains/save').status.should == 302
     follow_redirect!
     last_response.status.should == 200
-    last_response.should =~ /Invalid data : name is not present, type is not present, type is not a valid domain type/
+    last_response.body.should =~ /Invalid data : name is not present, type is not present, type is not a valid domain type/
   end
 
   should 'delete domain' do
@@ -153,7 +166,7 @@ describe "The Domains controller" do
     follow_redirect!
     last_response.status.should == 200
     last_response['Content-Type'].should == 'text/html'
-    last_response.should =~ /Entry 0.controller.domain.spec deleted successfully/
+    last_response.body.should =~ /Entry 0.controller.domain.spec deleted successfully/
   end
 
   should 'not delete a non-existent domain' do
@@ -161,7 +174,7 @@ describe "The Domains controller" do
     follow_redirect!
     last_response.status.should == 200
     last_response['Content-Type'].should == 'text/html'
-    last_response.should =~ /Sorry, the domain id '99999' doesn't exist/
+    last_response.body.should =~ /Sorry, the domain id '99999' doesn't exist/
   end
 
   should 'not delete a nil domain' do
@@ -169,7 +182,7 @@ describe "The Domains controller" do
     follow_redirect!
     last_response.status.should == 200
     last_response['Content-Type'].should == 'text/html'
-    last_response.should =~ /Ooops, you didn't ask me which domain you wanted/
+    last_response.body.should =~ /Ooops, you didn't ask me which domain you wanted/
   end
 
   should 'not add the same domain twice' do
@@ -180,16 +193,67 @@ describe "The Domains controller" do
     follow_redirect!
     last_response.status.should == 200
     last_response['Content-Type'].should == 'text/html'
-    last_response.should =~ /Invalid data : name is already taken/
+    last_response.body.should =~ /Invalid data : name is already taken/
   end
 
-  # 'View' oriented specs
-  
-  # TODO: Lame test alert. Use hpricot. See pagination helper in Ramaze for help 
-  should 'highligh domain properly in sidebar' do
-    get("/domains/records/#{@domains[0].id}").status.should == 200
+  should 'bump not bump a serial for a non existent domain' do
+    get("/domains/bump_serial/999999")
+    follow_redirect!
+    last_response.status.should == 200
     last_response['Content-Type'].should == 'text/html'
-    last_response.should =~ /<li class="active">/
+    nok = Nokogiri::HTML(last_response.body)
+    nok.css("div.alert-error > p").first.text.should.equal "Sorry, the domain id '999999' doesn't exist"
+  end
+
+  should 'bump not bump a serial for a nil domain' do
+    get("/domains/bump_serial/")
+    follow_redirect!
+    last_response.status.should == 200
+    last_response['Content-Type'].should == 'text/html'
+    nok = Nokogiri::HTML(last_response.body)
+    nok.css("div.alert-error > p").first.text.should.equal "Ooops, you didn't ask me which domain you wanted"
+  end
+
+  should 'bump a domain serial' do
+    id = Domain.filter(:name => '0.controller.domain.spec').first[:id]
+    r  = Record.create(:domain_id => id, :name => '0.controller.domain.spec', :type => 'SOA',
+                  :content => 'ns1.example.com postmaster.example.com 2012050401 7200 3600 4800 86400',
+                  :ttl => 4321)
+
+    get("/domains/bump_serial/#{id}")
+    follow_redirect!
+    last_response.status.should == 200
+    last_response['Content-Type'].should == 'text/html'
+    nok = Nokogiri::HTML(last_response.body)
+    nok.css("div.alert-success > p").first.text.should.equal "Serial for domain 0.controller.domain.spec bumped to 2012050402"
+    r.delete
+  end
+
+  should 'complain when a domain serial already ends with 99' do
+    id = Domain.filter(:name => '0.controller.domain.spec').first[:id]
+    r  = Record.create(:domain_id => id, :name => '0.controller.domain.spec', :type => 'SOA',
+                  :content => 'ns1.example.com postmaster.example.com 2012050499 7200 3600 4800 86400',
+                  :ttl => 4321)
+
+    post("/domains/bump_serial/#{id}")
+    follow_redirect!
+    last_response.status.should == 200
+    last_response['Content-Type'].should == 'text/html'
+    nok = Nokogiri::HTML(last_response.body)
+    nok.css("div.alert-error > p").first.text.should =~ /serial sequence is already maxed out for today/
+
+    r.delete
+  end
+
+  should 'complain if trying to bump and no SOA exists for domain' do
+    id = Domain.filter(:name => '0.controller.domain.spec').first[:id]
+
+    post("/domains/bump_serial/#{id}")
+    follow_redirect!
+    last_response.status.should == 200
+    last_response['Content-Type'].should == 'text/html'
+    nok = Nokogiri::HTML(last_response.body)
+    nok.css("div.alert-error > p").first.text.should =~ /there is no soa record available for this domain/
   end
 
 end

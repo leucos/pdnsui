@@ -1,6 +1,6 @@
 require_relative '../helper'
 
-require 'hpricot'
+require 'nokogiri'
 
 class SpecHelperSidebar < Ramaze::Controller
   map '/sidebar'
@@ -28,11 +28,13 @@ describe "The Sidebar helper" do
 
   should 'highlight domain properly' do
     %w{aaaa bbbb cccc}.each do |short|
-      doc = Hpricot(get("/sidebar/#{short}.sidebar.example.com").body)
-      doc.to_s.should =~ /<li class="active">/
-      (doc/'ul//li[@class="active"]').each do |li|
-        (li/"a").inner_html.should == "#{short}.sidebar.example.com"
+      doc = Nokogiri::HTML(get("/sidebar/#{short}.sidebar.example.com").body)
+
+      doc.css("li.active").text.should.not.be.empty
+      doc.css("ul > li.active").each do |li|
+        li.css("a").text.should.equal "#{short}.sidebar.example.com"
       end
+
     end
   end
 
