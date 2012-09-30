@@ -1,7 +1,9 @@
-public/doc/
-config/database.rb
 *.log
+.bundle
 .yardoc
-tmp/
+config/database.rb
 coverage/
+public/doc/
+tmp/
+vendor/
 
