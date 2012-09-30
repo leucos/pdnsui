@@ -102,6 +102,7 @@ Contributing to pdnsui
 * Fork the project
 * Use a specific branch for your changes (one bonus point if it's prefixed with 'feature/')
 * _write tests_, doc, commit and push until you are happy with your contribution
+* Send a pull request (against develop please)
 * Please try not to mess with the Rakefile, version, or history
 
 License
@@ -114,7 +115,7 @@ Credits
 -------
 
 - PDNSui is built with the awesome [Ramaze
-  Framework](https://github.com/Ramaze/ramaze) an [Sequel
+  Framework](https://github.com/Ramaze/ramaze) and [Sequel
 ORM](https://github.com/jeremyevans/sequel). Thanks to Sequel's author
 Jeremy Evans and to all the nice folks in Freenode#ramaze for their
 dedicated help. Bear with me guys ;)
