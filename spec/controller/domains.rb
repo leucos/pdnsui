@@ -1,5 +1,6 @@
 require_relative '../helper'
 require 'nokogiri'
+require 'date'
 
 module Rack
   class MockResponse
@@ -12,6 +13,8 @@ end
 
 describe "The Domains controller" do
   behaves_like :rack_test
+
+  serial_root = Date.today.strftime("%Y%m%d")
 
   before do
     Domain.filter(:name.like("%controller.domain.spec")).destroy
@@ -217,7 +220,7 @@ describe "The Domains controller" do
   should 'bump a domain serial' do
     id = Domain.filter(:name => '0.controller.domain.spec').first[:id]
     r  = Record.create(:domain_id => id, :name => '0.controller.domain.spec', :type => 'SOA',
-                  :content => 'ns1.example.com postmaster.example.com 2012050401 7200 3600 4800 86400',
+                  :content => "ns1.example.com postmaster.example.com #{serial_root}01 7200 3600 4800 86400",
                   :ttl => 4321)
 
     get("/domains/bump_serial/#{id}")
@@ -225,14 +228,14 @@ describe "The Domains controller" do
     last_response.status.should == 200
     last_response['Content-Type'].should == 'text/html'
     nok = Nokogiri::HTML(last_response.body)
-    nok.css("div.alert-success > p").first.text.should.equal "Serial for domain 0.controller.domain.spec bumped to 2012050402"
+    nok.css("div.alert-success > p").first.text.should.equal "Serial for domain 0.controller.domain.spec bumped to #{serial_root}02"
     r.delete
   end
 
   should 'complain when a domain serial already ends with 99' do
     id = Domain.filter(:name => '0.controller.domain.spec').first[:id]
     r  = Record.create(:domain_id => id, :name => '0.controller.domain.spec', :type => 'SOA',
-                  :content => 'ns1.example.com postmaster.example.com 2012050499 7200 3600 4800 86400',
+                  :content => "ns1.example.com postmaster.example.com #{serial_root}99 7200 3600 4800 86400",
                   :ttl => 4321)
 
     post("/domains/bump_serial/#{id}")
