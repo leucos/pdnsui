@@ -70,7 +70,7 @@ CNAME records should bring a list or A, AAAA, PTR, ... (should read RFC 1031/218
           <label class="control-label" for="name">Entry name</label>
           <div class="controls">
             <div class="input-append">
-              <input class="span2" name="name" id="mod-edit-recordname" size="16" type="text" placeholder="whatever">
+              <input name="name" id="mod-edit-recordname" size="16" type="text" placeholder="whatever">
             </div>
             <span class="help-inline" id="in-recordhelp">Type your record name</span>
           </div>
@@ -81,15 +81,11 @@ CNAME records should bring a list or A, AAAA, PTR, ... (should read RFC 1031/218
           <label class="control-label" for="type">Type</label>
           <div class="controls">
             <div class="input-append">
-              <select class="span2" id="mod-edit-recordtype" name="type">
-                <option value="A">A</option>
-                <option value="AAAA">AAAA</option>
-                <option value="CNAME">CNAME</option>
-                <option value="MX">MX</option>
-                <option value="NS">NS</option>
-                <option value="PTR">PTR</option>
-                <option value="SOA">SOA</option>
-                <option value="TXT">TXT</option>
+              <select id="mod-edit-recordtype" name="type">
+                <?r RR_TYPES.each_pair do |k,v| ?>
+                <?r next unless v[:active] ?>
+                <option #{"selected" if @record.type.downcase == k.downcase rescue ''} value="#{k}">#{k}</option>
+                <?r end ?>
               </select>
             </div>
             <span class="help-inline">Select record type</span>
@@ -101,7 +97,7 @@ CNAME records should bring a list or A, AAAA, PTR, ... (should read RFC 1031/218
           <label class="control-label" for="content">Content</label>
           <div class="controls">
             <div class="input-append">
-              <input class="span2" name="content" id="mod-edit-recordcontent" size="16" type="text" placeholder="whatever">
+              <input name="content" id="mod-edit-recordcontent" size="16" type="text" placeholder="whatever">
             </div>
             <span class="help-inline">Type you record content</span>
           </div>
@@ -112,7 +108,7 @@ CNAME records should bring a list or A, AAAA, PTR, ... (should read RFC 1031/218
           <label class="control-label" for="ttl">TTL</label>
           <div class="controls">
             <div class="input-append">
-              <input class="span2" name="ttl" id="mod-edit-recordttl" size="6" type="text" placeholder="86400">
+              <input name="ttl" id="mod-edit-recordttl" size="6" type="text" placeholder="86400">
               <!--              <span class="add-on">#{@domain.name}</span>-->
             </div>
             <span class="help-inline">Type a TTL</span>
@@ -124,7 +120,7 @@ CNAME records should bring a list or A, AAAA, PTR, ... (should read RFC 1031/218
           <label class="control-label" for="prio">Priority</label>
           <div class="controls">
             <div class="input-append">
-              <input class="span2" name="prio" id="mod-edit-recordprio" size="16" type="text" placeholder="10">
+              <input name="prio" id="mod-edit-recordprio" size="16" type="text" placeholder="10">
               <!-- <span class="add-on">#{@domain.name}</span> -->
             </div>
             <span class="help-inline">Type a priority (lower numbers give higher priority)</span>
