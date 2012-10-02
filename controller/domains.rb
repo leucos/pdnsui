@@ -8,7 +8,11 @@ class Domains < MainController
     @context=:domains
   end
 
-  def index
+
+  def index(arg=nil)
+    # If we have an arg, lets display a list of records for the domain
+    redirect Domains.r(:records, arg) if arg
+
     @title = 'Domains'
 
     # Get params, filtering ou nil and turning them to symbol
