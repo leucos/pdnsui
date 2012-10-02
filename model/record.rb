@@ -1,6 +1,7 @@
 class Record < Sequel::Model
   many_to_one :domain
   plugin :validation_helpers
+  plugin :json_serializer
   plugin :composition
 
   # We can only have one SOA per domain
