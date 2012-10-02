@@ -1,5 +1,6 @@
-/*
+
 $(document).ready(function(){
+/*
   $("#cg-recordname").keyup(function(e){
     $.ajax({
       url: window.location.origin + "/records/find/" + $("#in-recordname").val(),

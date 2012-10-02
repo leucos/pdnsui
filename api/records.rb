@@ -21,10 +21,12 @@ module PDNSui
           case a 
           when /^@(.*)$/
             domains = Domain.where(:name.like("%#{$1}%")).select(:id)
-          when /(.*):(.*)$/i
-            records = records.where(:type.ilike($1)).where(:name.ilike("%#{$2}%"))
-          when /=(.*)$/i
+          when /^\*(.*)$/i
+            records = records.where(:type.ilike($1))
+          when /^=(.*)$/i
             records = records.where(:content.ilike("%#{$1}%"))
+          when /^:(.*)$/i
+            records = records.where(:id => $1)
           else
             records = records.where(:name.ilike("%#{a}%"))
           end  
