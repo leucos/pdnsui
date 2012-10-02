@@ -1,0 +1,129 @@
+<!-- <?r #if logged_in? ?> -->
+<!-- <?r #end ?> -->
+
+<div class="page-header">
+  <h1>
+    #{@record.name}
+    <small>from domain <strong><a href="#{Domains.r(:index,@domain.id)}">#{@domain.name}</a></strong></small>
+  </h1>
+  <! -- Print serial from SOA if exists -->
+  <?r if @domain.soa.nil? ?>
+  <p><span class="label label-warning">Serial unknown</span></p>
+  <?r else ?>
+  <p><span class="label label-info">Serial ##{@domain.soa.domain_serial}</span></p>
+  <?r end ?>
+</div>
+
+<!-- this is the new/edit record form
+For best effect, it should adapt according to the record type
+For instance, LOC records should bring a map
+CNAME records should bring a list or A, AAAA, PTR, ... (should read RFC 1031/2181) -->
+
+<div id="mod-edit">
+  <form class="form-horizontal" method='POST' action="#{Records.r(:save)}">
+    <fieldset>
+        <h3>#{@domain.name}</h3>
+        <legend id="mod-edit-operation">Record content</legend>
+
+        <!-- Record Name -->
+        <div id="cg-recordname" class="control-group">
+          <label class="control-label" for="name">Entry name</label>
+          <div class="controls">
+            <div class="input-append">
+              <input name="name" id="mod-edit-recordname" size="16" type="text" placeholder="whatever" value="#{@record.name}">
+            </div>
+            <span class="help-inline" id="in-recordhelp">Type your record name</span>
+          </div>
+        </div>
+
+        <!-- Record Type -->
+        <div class="control-group">
+          <label class="control-label" for="type">Type</label>
+          <div class="controls">
+            <div class="input-append">
+              <select id="mod-edit-recordtype" name="type">
+                <?r RR_TYPES.each_pair do |k,v| ?>
+                <?r next unless v[:active] ?>
+                <option #{"selected" if @record.type.downcase == k.downcase} value="#{k}">#{k}</option>
+                <?r end ?>
+                <!-- <option value="A">A</option>
+                <option value="AAAA">AAAA</option>
+                <option value="CNAME">CNAME</option>
+                <option value="LOC">MX</option>
+                <option value="MX">MX</option>
+                <option value="NS">NS</option>
+                <option value="PTR">PTR</option>
+                <option value="SOA">SOA</option>
+                <option value="TXT">TXT</option> -->
+              </select>
+            </div>
+            <span class="help-inline">Select record type</span>
+          </div>
+        </div>
+
+        <!-- Record Content -->
+        <div class="control-group">
+          <label class="control-label" for="content">Content</label>
+          <div class="controls">
+            <div class="input-append">
+              <input name="content" id="mod-edit-recordcontent" size="16" type="text" placeholder="whatever" value="#{@record.content}">
+            </div>
+            <span class="help-inline">Type your record content</span>
+          </div>
+        </div>
+
+        <!-- Record TTL -->
+        <div class="control-group">
+          <label class="control-label" for="ttl">TTL</label>
+          <div class="controls">
+            <div class="input-append">
+              <input name="ttl" id="mod-edit-recordttl" size="6" type="text" placeholder="86400" value="#{@record.ttl}">
+              <!--              <span class="add-on">#{@domain.name}</span>-->
+            </div>
+            <span class="help-inline">Type a TTL</span>
+          </div>
+        </div>
+
+        <!-- Record Priority -->
+        <div class="control-group">
+          <label class="control-label" for="prio">Priority</label>
+          <div class="controls">
+            <div class="input-append">
+              <input name="prio" id="mod-edit-recordprio" size="16" type="text" placeholder="10" value="#{@record.prio}">
+              <!-- <span class="add-on">#{@domain.name}</span> -->
+            </div>
+            <span class="help-inline">Type a priority (lower numbers give higher priority)</span>
+          </div>
+        </div>
+
+        <input type="hidden" id="mod-edit-recordid" name="record_id" value="#{@record.id}">
+        <input type="hidden" name="domain_id" value="#{@domain.id}">
+
+        <?r if @record ?>
+        <a href="#mod-delete" class="btn btn-danger" id="del-record-#{@record.id}" data-toggle="modal">Delete Record</a> 
+        <?r end ?><button type="submit" id="mod-edit-recordsubmit" class="btn">#{ @record ? "Change Record" : "Add Record"}</button>
+
+    </fieldset>
+  </form>
+</div>
+
+<!-- modal popup for record delete -->
+<div class="modal hide fade in" id="mod-delete">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h2 id="mod-delete-name">#{@record.name}</h2>
+  </div>
+  <div class="modal-body">
+    <div class="alert">
+      <p><strong>Warning!</strong></p>
+      This operation will delete the <strong id="mod-delete-text-name">#{@record.name}</strong> 
+      <span id="mod-delete-rec-type">#{@record.type}</span> record.
+      Are you x sure you want to do this ?
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="btn btn-primary" href="#" data-dismiss="modal">Cancel</a>
+    <a class="btn btn-danger" id="mod-delete-submit" href="#{Records.r(:delete, @record.id)}">Delete record</a>
+  </div>
+</div>
+<!-- end of modal -->
