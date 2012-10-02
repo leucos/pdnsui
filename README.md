@@ -67,11 +67,11 @@ Using the search field
 
 The seach field is rather nice. You can combine filtering on domains, record name, record content and record type:
 
-`@<domain>` will restrict search to a single domain, e.g. `@github.com`
-`*<type>` will restrict search to a single type, e.g. `:mx`
-`:<id>` will retrieve a specific record ID
-`=<text>` will restrict search to records having 'test' in their `content` field
-`<text>` will search for 'text' in the record's name
+* `@<domain>` will restrict search to a single domain, e.g. `@github.com`
+* `*<type>` will restrict search to a single type, e.g. `:mx`
+* `:<id>` will retrieve a specific record ID
+* `=<text>` will restrict search to records having 'test' in their `content` field
+* `<text>` will search for 'text' in the record's name
 
 For instance, typing `@github.com *mx =2 goog` will search for all MX records 
 in the `github.com` domain, containing `goog` in their name, and having `2` in 
