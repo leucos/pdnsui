@@ -2,37 +2,22 @@
 # Controller for Domains
 #
 class Records < MainController
-  def index(arg)
-    Ramaze::Log.info("index");
-    @record=Record[arg]
-    if @record
-      @domain = @record.domain
-      @record
-    else
-      nil
-    end
+
+  def initialize
+    super
+    @api = PDNSui::API::Records.new
   end
 
-  def read(arg)
-    Ramaze::Log.info("here");
+  def index(arg)
+    redirect_referrer unless @record = @api.read(arg)
+
+    @domain = @record.domain
   end
 
   def delete(id=nil)
-    r = Record[id]
-    did = nil
+    @api.delete(id)
 
-    if id.nil?
-      flash[:error] = "Ooops, you didn't ask me which record you wanted"
-    elsif r.nil?
-      flash[:error] = "Sorry, the record ID '%s' doesn\'t exist" % id
-    else
-      did = r.domain.id
-
-      model_wrap("delete", r.name) do
-        r.destroy
-      end
-    end
-    did ? redirect(Domains.r(:index, did)) : redirect_referrer
+    redirect_referrer
   end
 
   # This method handles updates & inserts
@@ -44,25 +29,12 @@ class Records < MainController
     data = request.subset(:domain_id, :name, :content, :type, :ttl, :prio)
 
     if !id.nil? and !id.empty?
-      record = Record[id]
-
-      # Let's check the id provided is valid
-      if record.nil?
-        flash[:error] = %q{Can not update this record (I can't find it)}
-        redirect_referrer
-      end
-
-      operation = "update"
+      @api.update(id)
     else
-      # Create
-      record = Record.new
-      operation = "create"
-    end
-
-    model_wrap(operation, data['name']) do
-      record.update(data)
+      @api.create
     end
 
     redirect Domains.r(:records, data['domain_id'])
+
   end
 end

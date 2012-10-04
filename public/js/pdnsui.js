@@ -43,10 +43,10 @@ $(document).ready(function(){
       if ($("#search").val().length < 3) {
        return;
       }
-      console.log(window.location.origin + "/api/records/search/" + query.replace(/ /g,'/'));
+      console.log(window.location.origin + "/api/records/search/" + query.replace(/ /g,'/') + ".api");
 
       $.ajax({
-        url: window.location.origin + "/api/records/search/" + query.replace(/ /g,'/'),
+        url: window.location.origin + "/api/records/search/" + query.replace(/ /g,'/') + ".api",
         dataType: 'json',
         type: 'POST',
         data: 'limit=15',

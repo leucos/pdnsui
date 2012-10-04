@@ -5,6 +5,8 @@ class Domains < MainController
 
   before_all do
     # Context helps the default layout highlighting the good entry in the navbar
+    Ramaze::Log.info("Here")
+
     @context=:domains
   end
 

@@ -32,6 +32,8 @@ module Ramaze
       # format.
       #
       def model_wrap(operation="operate on", name="", &block)
+        Ramaze::Log.info("in model wrap")
+        Ramaze::Log.info(action.inspect)
         begin
           yield
 
@@ -71,6 +73,12 @@ module Ramaze
 
       end
 
+      private
+
+      def set_error(message)
+        Ramaze::Log.info(node.inspect)
+        flash[:error] = message
+      end
     end
   end
 end

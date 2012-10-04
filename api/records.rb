@@ -2,17 +2,49 @@
 
 module PDNSui
   module API
+
     class Records < Ramaze::Controller
-      helper :restify
+      helper :restify, :model_exception_wrapper
       map "/api/records"
 
-      def search(*args)
+      def create
+        data = request.subset(:domain_id, :name, :type, :content, :ttl, :prio)
+        name = request.params['name']
+        api_model_wrap("create", name) do
+          Record.create(data)
+        end
+      end
 
+      def read(arg)
+        api_model_wrap do
+          get_record(:read, arg)
+        end
+      end
+
+      def update(arg)
+        data = request.subset(:domain_id, :name, :type, :content, :ttl, :prio)
+        Ramaze::Log.info(data.inspect)
+
+        api_model_wrap("update", data['name']) do
+          rec = get_record(:update, arg)
+
+          rec.update(data)
+          rec.save
+        end
+      end
+
+      def delete(arg)
+        rec = get_record(:delete, arg)
+        name = rec[:name] rescue nil
+        api_model_wrap("delete", name) do
+          rec.delete
+        end
+      end
+
+      def search(*args)
         # Example searches : 
         # .../search/cname:www/@erasme => look for a cname containing 'www' in domain containing 'erasme'
         # .../search/ptr:210/@0.168.192.in-addr.arpa => look for an IP containing 210 in reverse zone for 192.168.0
-
-        Ramaze::Log.info args.inspect
 
         records = Record.where(:id != nil)
         domains = nil
@@ -38,10 +70,18 @@ module PDNSui
         # Limit number of records returned
         records = records.limit(request.params['limit']) if request.params['limit']
 
-        Ramaze::Log.info records.inspect
-
-        reply!( records.all )
+        Ramaze::Log.debug("Got %s matching records" % records.count)
+        records.all
+        #eply!( records.all )
       end
+
+      private
+
+      def get_record(wat, id)
+        #can?(wat, id) or raise PDNSui::API::InsufficientRightsError
+        Record[id] #or raise PDNSui::API::InvalidObjectError
+      end
+
     end
   end
 end
