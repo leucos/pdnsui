@@ -14,7 +14,7 @@ class Records < MainController
     @domain = @record.domain
   end
 
-  def delete(id=nil)
+  def delete(id)
     @api.delete(id)
 
     redirect_referrer

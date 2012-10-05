@@ -3,6 +3,15 @@ module Ramaze
   module Helper
     module Restify
 
+      class NonExistentRecordError < StandardError
+        attr_reader :id
+
+        def initialize(id)
+          Ramaze::Log.info("id : %s" % id)
+          @id = id
+        end
+      end
+
       # Expose helper methods as actions
       Ramaze::Helper::EXPOSE << self
 
@@ -73,7 +82,12 @@ module Ramaze
 
         begin
           result = yield
- 
+
+        rescue Ramaze::Helper::Restify::NonExistentRecordError => e
+          Ramaze::Log.info e.inspect
+          set_error("Invalid record : %s" % e.id, mode) 
+          redirect_referrer # never happens if :api
+
         # Handle validation errors
         rescue Sequel::ValidationFailed => e
           set_error("Invalid data : %s" % e.message, mode) 

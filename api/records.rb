@@ -34,8 +34,13 @@ module PDNSui
       end
 
       def delete(arg)
-        rec = get_record(:delete, arg)
+        rec = nil
+        api_model_wrap do
+          rec = get_record(:delete, arg)
+        end
+
         name = rec[:name] rescue nil
+
         api_model_wrap("delete", name) do
           rec.delete
         end
@@ -79,7 +84,7 @@ module PDNSui
 
       def get_record(wat, id)
         #can?(wat, id) or raise PDNSui::API::InsufficientRightsError
-        Record[id] #or raise PDNSui::API::InvalidObjectError
+        Record[id] or raise Ramaze::Helper::Restify::NonExistentRecordError.new(id)
       end
 
     end
