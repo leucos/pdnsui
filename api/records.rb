@@ -75,9 +75,7 @@ module PDNSui
         # Limit number of records returned
         records = records.limit(request.params['limit']) if request.params['limit']
 
-        Ramaze::Log.debug("Got %s matching records" % records.count)
         records.all
-        #eply!( records.all )
       end
 
       private
