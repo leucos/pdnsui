@@ -21,10 +21,11 @@ describe "The Records controller" do
          :domain_id => @domain.id,
          :name      => '2.example.com',
          :type      => 'CNAME',
-         :content   => '3.example.com').status.should == 302
-    last_response['Content-Type'].should == 'text/html'
+         :content   => '3.example.com').status.should === 302
+    last_response['Content-Type'].should === 'text/html'
     follow_redirect!
-    last_response['Content-Type'].should == 'text/html'
+    last_response['Content-Type'].should === 'text/html'
+    nok = Nokogiri::HTML(last_response.body)
     last_response.should =~ /Entry 2.example.com created successfully/
   end
 
@@ -34,10 +35,10 @@ describe "The Records controller" do
          :record_id => @record.id,
          :name      => 'aaaa',
          :type      => 'CNAME',
-         :content   => 'bbbb').status.should == 302
-    last_response['Content-Type'].should == 'text/html'
+         :content   => 'bbbb').status.should === 302
+    last_response['Content-Type'].should === 'text/html'
     follow_redirect!
-    last_response['Content-Type'].should == 'text/html'
+    last_response['Content-Type'].should === 'text/html'
     last_response.should =~ /Entry aaaa updated successfully/
   end
 
@@ -49,10 +50,10 @@ describe "The Records controller" do
          :type      => 'TXT',
          :content   => 'efgh',
          :ttl       => 9876,
-         :prio      => 42).status.should == 302
-    last_response['Content-Type'].should == 'text/html'
+         :prio      => 42).status.should === 302
+    last_response['Content-Type'].should === 'text/html'
     follow_redirect!
-    last_response['Content-Type'].should == 'text/html'
+    last_response['Content-Type'].should === 'text/html'
     last_response.should =~ /Entry abcd updated successfully/
     @record.reload
     @record.name.should.equal 'abcd.example.com'
@@ -68,35 +69,34 @@ describe "The Records controller" do
          :record_id => 999999,
          :name      => 'aaaa',
          :type      => 'CNAME',
-         :content   => 'bbbb').status.should == 302
-    last_response['Content-Type'].should == 'text/html'
+         :content   => 'bbbb').status.should === 302
+    last_response['Content-Type'].should === 'text/html'
     follow_redirect!
-    last_response['Content-Type'].should == 'text/html'
-    last_response.should =~ /Can not update this record/
+    last_response['Content-Type'].should === 'text/html'
+    last_response.should =~ /Invalid record : 999999/
   end
 
   should 'delete record' do
-    get("/records/delete/#{@record.id}").status.should == 302
+    get("/records/delete/#{@record.id}").status.should === 302
     follow_redirect!
-    last_response.status.should == 200
-    last_response['Content-Type'].should == 'text/html'
+    last_response.status.should === 200
+    last_response['Content-Type'].should === 'text/html'
     last_response.should =~ /Entry 0.example.com deleted successfully/
   end
 
   should 'not delete a non-existent record' do
-    get("/records/delete/999999").status.should == 302
+    get("/records/delete/999999").status.should === 302
     follow_redirect!
-    last_response.status.should == 200
-    last_response['Content-Type'].should == 'text/html'
-    last_response.should =~ /Sorry, the record id '999999' doesn't exist/
+    last_response.status.should === 200
+    last_response['Content-Type'].should === 'text/html'
+    last_response.should =~ /Invalid record : 999999/
   end
 
-  should 'not delete a nil record' do
-    get("/records/delete/").status.should == 302
+  should 'not accept delete without an ID' do
+    get("/records/delete/").status.should === 302
     follow_redirect!
-    last_response.status.should == 200
-    last_response['Content-Type'].should == 'text/html'
-    last_response.should =~ /Ooops, you didn't ask me which record you wanted/
+    last_response.status.should === 200
+    last_response['Content-Type'].should == 'text/html'    
   end
 
   should 'not add the same record twice' do
@@ -104,10 +104,10 @@ describe "The Records controller" do
          :domain_id => @domain.id,
          :name      => '0.example.com',
          :type      => 'CNAME',
-         :content   => '1.example.com').status.should == 302
+         :content   => '1.example.com').status.should === 302
     follow_redirect!
-    last_response.status.should == 200
-    last_response['Content-Type'].should == 'text/html'
+    last_response.status.should === 200
+    last_response['Content-Type'].should === 'text/html'
     last_response.should =~ /Invalid data : domain_id and name and type and content is already taken/
   end
 end
