@@ -21,12 +21,12 @@ describe "The Records controller" do
          :domain_id => @domain.id,
          :name      => '2.example.com',
          :type      => 'CNAME',
-         :content   => '3.example.com').status.should === 302
-    last_response['Content-Type'].should === 'text/html'
+         :content   => '3.example.com').status.should.equal 302
+    last_response['Content-Type'].should.equal 'text/html'
     follow_redirect!
-    last_response['Content-Type'].should === 'text/html'
-    nok = Nokogiri::HTML(last_response.body)
-    last_response.should =~ /Entry 2.example.com created successfully/
+    last_response['Content-Type'].should.equal 'text/html'
+
+    noko_text('div.alert-block p').should.equal "Entry 2.example.com created successfully"
   end
 
   should 'update record for a domain' do
@@ -35,11 +35,11 @@ describe "The Records controller" do
          :record_id => @record.id,
          :name      => 'aaaa',
          :type      => 'CNAME',
-         :content   => 'bbbb').status.should === 302
-    last_response['Content-Type'].should === 'text/html'
+         :content   => 'bbbb').status.should.equal 302
+    last_response['Content-Type'].should.equal 'text/html'
     follow_redirect!
-    last_response['Content-Type'].should === 'text/html'
-    last_response.should =~ /Entry aaaa updated successfully/
+    last_response['Content-Type'].should.equal 'text/html'
+    noko_text('div.alert-block p').should.equal "Entry aaaa updated successfully"
   end
 
   should 'update record fields properly' do
@@ -50,11 +50,12 @@ describe "The Records controller" do
          :type      => 'TXT',
          :content   => 'efgh',
          :ttl       => 9876,
-         :prio      => 42).status.should === 302
-    last_response['Content-Type'].should === 'text/html'
+         :prio      => 42).status.should.equal 302
+    last_response['Content-Type'].should.equal 'text/html'
     follow_redirect!
-    last_response['Content-Type'].should === 'text/html'
-    last_response.should =~ /Entry abcd updated successfully/
+    last_response['Content-Type'].should.equal 'text/html'
+    noko_text('div.alert-block p').should.equal "Entry abcd updated successfully"
+
     @record.reload
     @record.name.should.equal 'abcd.example.com'
     @record.type.should.equal 'TXT'
@@ -69,34 +70,34 @@ describe "The Records controller" do
          :record_id => 999999,
          :name      => 'aaaa',
          :type      => 'CNAME',
-         :content   => 'bbbb').status.should === 302
-    last_response['Content-Type'].should === 'text/html'
+         :content   => 'bbbb').status.should.equal 302
+    last_response['Content-Type'].should.equal 'text/html'
     follow_redirect!
-    last_response['Content-Type'].should === 'text/html'
-    last_response.should =~ /Invalid record : 999999/
+    last_response['Content-Type'].should.equal 'text/html'
+    noko_text('div.alert-block p').should.equal "Invalid record : 999999"
   end
 
   should 'delete record' do
-    get("/records/delete/#{@record.id}").status.should === 302
+    get("/records/delete/#{@record.id}").status.should.equal 302
     follow_redirect!
-    last_response.status.should === 200
-    last_response['Content-Type'].should === 'text/html'
-    last_response.should =~ /Entry 0.example.com deleted successfully/
+    last_response.status.should.equal 200
+    last_response['Content-Type'].should.equal 'text/html'
+    noko_text('div.alert-block p').should.equal "Entry 0.example.com deleted successfully"
   end
 
   should 'not delete a non-existent record' do
-    get("/records/delete/999999").status.should === 302
+    get("/records/delete/999999").status.should.equal 302
     follow_redirect!
-    last_response.status.should === 200
-    last_response['Content-Type'].should === 'text/html'
-    last_response.should =~ /Invalid record : 999999/
+    last_response.status.should.equal 200
+    last_response['Content-Type'].should.equal 'text/html'
+    noko_text('div.alert-block p').should.equal "Invalid record : 999999"
   end
 
   should 'not accept delete without an ID' do
-    get("/records/delete/").status.should === 302
+    get("/records/delete/").status.should.equal 302
     follow_redirect!
-    last_response.status.should === 200
-    last_response['Content-Type'].should == 'text/html'    
+    last_response.status.should.equal 200
+    last_response['Content-Type'].should.equal 'text/html'    
   end
 
   should 'not add the same record twice' do
@@ -104,11 +105,12 @@ describe "The Records controller" do
          :domain_id => @domain.id,
          :name      => '0.example.com',
          :type      => 'CNAME',
-         :content   => '1.example.com').status.should === 302
+         :content   => '1.example.com').status.should.equal 302
     follow_redirect!
-    last_response.status.should === 200
-    last_response['Content-Type'].should === 'text/html'
-    last_response.should =~ /Invalid data : domain_id and name and type and content is already taken/
+    last_response.status.should.equal 200
+    last_response['Content-Type'].should.equal 'text/html'
+
+    noko_text('div.alert-block p').should.equal "Invalid data : domain_id and name and type and content is already taken"
   end
 end
 
