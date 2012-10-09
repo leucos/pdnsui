@@ -4,7 +4,7 @@ module PDNSui
   module API
 
     class Records < Ramaze::Controller
-      helper :restify, :model_exception_wrapper
+      helper :restify
       map "/api/records"
 
       def create

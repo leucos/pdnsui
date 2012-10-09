@@ -2,7 +2,7 @@
 # Controller for Domains
 #
 class Domains < MainController
-
+  helper :restify
   before_all do
     # Context helps the default layout highlighting the good entry in the navbar
     Ramaze::Log.info("Here")
@@ -57,7 +57,7 @@ class Domains < MainController
       operation = "create"
     end
 
-    model_wrap(operation, data['name']) do
+    api_model_wrap(operation, data['name']) do
       @domain.update(data)
     end
 
@@ -74,7 +74,7 @@ class Domains < MainController
       flash[:error] = "Sorry, the domain ID '%s' doesn\'t exist" % id
       redirect Domains.r(:index)
     else
-      model_wrap("delete", d.name) do
+      api_model_wrap("delete", d.name) do
         d.destroy
       end
     end
