@@ -111,7 +111,7 @@ module Ramaze
           end
           redirect_referrer
 
-          # Handle other exceptions
+        # Handle other exceptions
         rescue Exception => e
           Ramaze::Log.error(e) if Ramaze.options.mode == :live
 
@@ -119,7 +119,7 @@ module Ramaze
           redirect_referrer
 
         else
-          flash[:success] = "Entry %s %sd successfully" % [ name, operation ] if mode == :web
+          flash[:success] = "Entry %s %sd successfully" % [ name, operation ] if mode == :web and operation
         end
 
         result
