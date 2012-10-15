@@ -1,0 +1,53 @@
+
+<h2>#{@subtitle}</h2>
+
+<p class="lead">
+Keep an eye on these guys
+</p>
+
+Well, this page is totally unplugged. It's just a mockup.
+<div class="accordion" id="accordion">
+
+  <?r @users.each do |u| ?>
+
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" id="accordion-toggle-#{u.id}" data-toggle="collapse" data-parent="#accordion" href="#collapse-#{u.id}">
+        <img src="#{gravatar(u.email, :size => 40)}" /> #{u.email}
+      </a>
+    </div>
+    <div id="collapse-#{u.id}" class="accordion-body collapse">
+      <div class="accordion-inner">
+        <label class="checkbox">
+          <fieldset>
+            <input type="checkbox"#{"checked=\"true\"" if u.super_powers?}> Superpowers!</input>
+          </fieldset>
+        </label>
+
+        <ul class="sortable" data-user-id="#{u.id}" style="list-style-type: none;">
+        <?r u.rights.each do |r| ?>
+          <li id="right-#{r.id}" data-right-id="#{r.id}">  
+            <div class="alert alert-#{r.allow ? "success" : "error"}">
+              <button type="button" class="close" data-dismiss="alert">×</button>
+              <span class="label">#{r.ability}</span> <strong>#{r.domain}</strong>
+                 #{r.allow ? 
+                '<span class="label label-success pull-right"><i class="icon-ok icon-white"></i> Allow</span>' : 
+                '<span class="label label-important pull-right"><i class="icon-remove icon-white"></i> Deny</span>'}
+            </div> 
+          </li>  
+        <?r end ?>
+        </ul>
+
+      </div>
+    </div>
+  </div>
+
+  <?r end ?>
+  
+</div>
+
+<div>
+  #{@users.navigation}
+</div>
+
+#{js('users')}

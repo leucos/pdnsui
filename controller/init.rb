@@ -22,6 +22,7 @@ end
 #  end
 #
 require __DIR__('main')
+require __DIR__('users')
 require __DIR__('domains')
 require __DIR__('records')
 require __DIR__('utils')

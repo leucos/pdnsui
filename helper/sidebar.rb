@@ -2,6 +2,9 @@ module Ramaze
   module Helper
     module SideBar
       def generate(current=nil)
+        # Extra protection
+        return nil unless logged_in?
+
         # Get the domain name currently being returned but the Domain controller
         # If we're not called from a Domain action, set it to an empty String so
         # Ruby doesn't complain
@@ -30,6 +33,9 @@ module Ramaze
           name
         end
         entries.each do |d|
+          # Check if current user can see this domain
+          next unless user.can?(:read, d.name)
+
           if current.eql?(d.name)
             sidebar.li(:class => "active") { Domains.a(d.name, :records, d.id) }
           else

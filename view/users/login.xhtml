@@ -1,0 +1,31 @@
+  
+<h2>#{@subtitle}</h2>
+
+<p class="lead">
+Please, log in with your email and password
+</p>
+
+<form class="form-horizontal well" method="post" action="#{Users.r(:login)}">
+  <fieldset class="control-group errors">
+
+    <!-- email -->
+    <div class="control-group">
+      <label class="control-label" for="email"><strong>Email</strong></label>
+      <div class="controls">
+        <input type="text" class="input-large" id="email" name="email" />
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="password"><strong>Password</strong></label>
+      <div class="controls">
+        <input type="password" class="input-large" id="password" name="password" />
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" id="connect" name="connect">Connexion</button>
+    </div>
+
+  </fieldset>
+</form>

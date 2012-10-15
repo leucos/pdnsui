@@ -10,6 +10,8 @@ gem 'whois'
 gem 'json'
 gem 'thin'
 gem 'dnsruby'
+gem 'bcrypt-ruby'
+
 
 group :development do
     gem 'rspec'

@@ -2,11 +2,12 @@
 # Controller for Domains
 #
 class Domains < MainController
-  helper :restify
+  helper :restify, :user
+
   before_all do
     # Context helps the default layout highlighting the good entry in the navbar
     Ramaze::Log.info("Here")
-
+    redirect Users.r(:login) unless logged_in?
     @context=:domains
   end
 
