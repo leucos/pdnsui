@@ -3,6 +3,8 @@ class Domain < Sequel::Model
   plugin :validation_helpers
   plugin :composition
 
+  self.db = DB
+  
   #TODO : implement multi-master for slaves; check http://doc.powerdns.com/slave.html
   #Since 2.9.21, PowerDNS supports multiple
   #masters. For the BIND backend, the native BIND configuration language

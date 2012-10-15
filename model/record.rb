@@ -4,6 +4,8 @@ class Record < Sequel::Model
   plugin :json_serializer
   plugin :composition
 
+  self.db = DB
+
   # We can only have one SOA per domain
   # Also, we can not have exactly the same records
   def validate
