@@ -13,28 +13,27 @@
   <p><span class="label label-info">Serial ##{@domain.soa.domain_serial}</span></p>
   <?r end ?>
 
-
-<div class="btn-toolbar" style="margin-bottom: 10px">
-  <div class="btn-group">
-    <a class="btn btn" href="#" id="new-record"><i class="icon-plus-sign"></i> Add record</a>
+  <div class="btn-toolbar" style="margin-bottom: 10px">
+    <div class="btn-group">
+      <a class="btn btn" href="#" id="new-record"><i class="icon-plus-sign"></i> Add record</a>
+    </div>
+    <div class="btn-group">
+      <a class="btn btn-warning" href="#{Domains.r(:bump_serial, @domain.id)}"><i class="icon-step-forward icon-white"></i> Bump Serial</a>
+      <a class="btn btn disabled" href="#"><i class="icon-refresh"></i> Notify slaves</a>
+    </div>
+    <div class="btn-group">
+      <a class="btn btn-primary disabled" href="#"><i class="icon-eye-open icon-white"></i> Check</a>
+      <a class="btn btn-primary dropdown-toggle disabled" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+      <ul class="dropdown-menu">
+        <li><a href="#"><i class="icon-info-sign"></i> Whois</a></li>
+        <li><a href="#"><i class="icon-question-sign"></i> Query slaves</a></li>
+        <li><a href="#"><i class="icon-exclamation-sign"></i> Query random</a></li>
+        <li><a href="#"><i class="icon-list-alt"></i> Statistics</a></li>
+        <li class="divider"></li>
+        <li><a href="#"><i class="icon-screenshot"></i> Consistency check</a></li>
+      </ul>
+    </div>
   </div>
-  <div class="btn-group">
-    <a class="btn btn-warning" href="#{Domains.r(:bump_serial, @domain.id)}"><i class="icon-step-forward icon-white"></i> Bump Serial</a>
-    <a class="btn btn disabled" href="#"><i class="icon-refresh"></i> Notify slaves</a>
-  </div>
-  <div class="btn-group">
-    <a class="btn btn-primary disabled" href="#"><i class="icon-eye-open icon-white"></i> Check</a>
-    <a class="btn btn-primary dropdown-toggle disabled" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-    <ul class="dropdown-menu">
-      <li><a href="#"><i class="icon-info-sign"></i> Whois</a></li>
-      <li><a href="#"><i class="icon-question-sign"></i> Query slaves</a></li>
-      <li><a href="#"><i class="icon-exclamation-sign"></i> Query random</a></li>
-      <li><a href="#"><i class="icon-list-alt"></i> Statistics</a></li>
-      <li class="divider"></li>
-      <li><a href="#"><i class="icon-screenshot"></i> Consistency check</a></li>
-    </ul>
-  </div>
-</div>
 </div>
 
 <script type="text/javascript">
@@ -60,7 +59,7 @@ CNAME records should bring a list or A, AAAA, PTR, ... (should read RFC 1031/218
     <fieldset>
       <div class="modal-header">
         <a class="close" data-dismiss="modal">×</a>
-        <h3>#{@domain.name}</h3>
+        <h3 id="mod-edit-domainame">#{@domain.name}</h3>
       </div>
       <div class="modal-body">
         <legend id="mod-edit-operation">New record</legend>
@@ -128,7 +127,7 @@ CNAME records should bring a list or A, AAAA, PTR, ... (should read RFC 1031/218
         </div>
 
         <input type="hidden" id="mod-edit-recordid" name="record_id" value="">
-        <input type="hidden" name="domain_id" value="#{@domain.id}">
+        <input type="hidden" id="mod-edit-domainid" name="domain_id" value="#{@domain.id}">
 
       </div> <!-- modal-body -->
 
@@ -142,7 +141,6 @@ CNAME records should bring a list or A, AAAA, PTR, ... (should read RFC 1031/218
 
 <?r if ! @records.empty? ?>
 
-
 <!-- modal popup for record delete -->
 <div class="modal hide fade in" id="mod-delete">
   <div class="modal-header">
@@ -154,7 +152,7 @@ CNAME records should bring a list or A, AAAA, PTR, ... (should read RFC 1031/218
       <p><strong>Warning!</strong></p>
       This operation will delete the <strong id="mod-delete-text-name"></strong> 
       <span id="mod-delete-rec-type"></span> record.
-      Are you x sure you want to do this ?
+      Are you sure you want to do this ?
     </div>
   </div>
   <div class="modal-footer">
@@ -164,9 +162,7 @@ CNAME records should bring a list or A, AAAA, PTR, ... (should read RFC 1031/218
 </div>
 <!-- end of modal -->
 
-
 <div>
-
   <table class="table table-striped table-condensed">
     <thead>
       <tr>
@@ -200,23 +196,50 @@ CNAME records should bring a list or A, AAAA, PTR, ... (should read RFC 1031/218
         <td style="vertical-align:middle">#{record.content}</td>
         <td style="vertical-align:middle">#{record.ttl}</td>
         <td style="vertical-align:middle">#{record.prio}</td>
-        <td style="vertical-align:middle">
+        <td style="vertical-align:middle; text-align:right">
 
           <div class="btn-toolbar" style="margin-bottom: -1px">
             <div class="btn-group">
-              <a class="btn btn-mini" id="edit-record-#{record.id}" href="#"><i class="icon-edit"></i></a>
-              <a class="btn btn-mini btn-danger" id="del-record-#{record.id}" href="#" data-toggle="modal">
+              <?r if record.type == "A" ?>
+              <a class="btn btn-mini" id="a2ptr-record-#{record.id}" href="#" rel="tooltip" title="Create PTR record from this A"><i class="icon-retweet"></i></a>
+              <?r elsif record.type == "PTR" ?>
+              <a class="btn btn-mini" id="ptr2a-record-#{record.id}" href="#" rel="tooltip" title="Create A record from this PTR"><i class="icon-retweet"></i></a>
+              <?r end ?>
+              <a class="btn btn-mini" id="edit-record-#{record.id}" href="#" rel="tooltip" title="Edit record"><i class="icon-edit"></i></a>
+              <a class="btn btn-mini btn-danger" id="del-record-#{record.id}" href="#" rel="tooltip" data-toggle="modal"  title="Delete record">
                 <i class="icon-remove"></i>
               </a>
             </div>
           </div>
           <script type="text/javascript">
+            $(function() {
+              $('a[rel="tooltip"]').tooltip();
+            });
+
+            // How can we change this ?
+            // This generates quite a bunch of code
             $("#del-record-#{record.id}").click(function() {
               $('#mod-delete-name').html("#{record.name}");
               $('#mod-delete-text-name').html("#{record.name}");
               $('#mod-delete-submit').attr("href", "#{Records.r(:delete, record.id)}");
               $('#mod-delete-rec-type').html("#{record.type}");
               $('#mod-delete').modal('show');
+              });
+            $("#a2ptr-record-#{record.id}").click(function() {
+              $('#mod-edit-operation').html("Create #{record.name}");
+              $('#mod-edit-recordname').attr("value","#{record.content.split('.').reverse.join('.')}.in-addr.arpa");
+              $("#mod-edit-recordtype option[value='PTR']").attr("selected", "selected");
+              $('#mod-edit-recordcontent').attr("value", "#{record.name}");
+              $('#mod-edit-recordttl').attr("value", "#{record.ttl}");
+              $('#mod-edit-recordprio').attr("value", "#{record.prio}");
+              $('#mod-edit-recordid').attr("value","");
+              $('#mod-edit-recordsubmit').attr("href","#");
+
+              // need to find a way to get best domain here...
+              $('#mod-edit-domainid').attr("value","");       
+
+              $('#mod-edit-recordsubmit').html("Create record");
+              $('#mod-edit').modal('show');
               });
             $("#edit-record-#{record.id}").click(function() {
               $('#mod-edit-operation').html("Edit #{record.name}");
