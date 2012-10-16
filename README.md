@@ -47,6 +47,21 @@ cp config/database.rb.sample config/database.rb
 vim config/database.rb
 ```
 
+* Create the users database
+
+The users database is different thatn the powerdns database.
+
+```bash
+rake db:migrate
+```
+
+You might want to seed the database with the first user (admin/1234) if 
+runing for the first time :
+
+```bash
+rake db:seed
+```
+
 * Start the application 
 
 ```bash
