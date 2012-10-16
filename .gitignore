@@ -3,6 +3,8 @@
 .yardoc
 config/database.rb
 coverage/
+db/*.db
+db/schema.rb
 pdnsui.sublime-*
 public/doc/
 tmp/

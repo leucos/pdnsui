@@ -1,12 +1,10 @@
 class User < Sequel::Model
-
-  plugin :schema
   one_to_many :rights
 
   include BCrypt
-  
+
   self.db = AUTH
-  
+
   def password
     @password ||= Password.new(password_hash)
   end
@@ -49,16 +47,4 @@ class User < Sequel::Model
 
   end
 
-  set_schema do
-    primary_key :id
-
-    varchar :email, :unique => true, :empty => false
-    varchar :password_hash, :empty => false
-    boolean :super_powers, :default => false
-  end
-
-  if ! table_exists?
-    create_table
-    create :email => 'admin', :password => '1234', :super_powers => true
-  end
 end
