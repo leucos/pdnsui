@@ -29,11 +29,10 @@ class Users < Controller
 
       if !logged_in?
         # Login failed
-        Ramaze::Log.debug("OMG login failed")
-        flash[:error] = "Erreur d'identifiant ou de mot de passe"
+        Ramaze::Log.debug("Login failed")
+        flash[:error] = "The username or password you entered is incorrect."
         redirect Users.r(:login)
       else
-        flash[:success] = "Hello #{user.email}"
         redirect_referrer 
       end
     end
@@ -42,10 +41,8 @@ class Users < Controller
   end
 
   def logout
-    flash[:success] = "Déconnecté"
     user_logout
     session.resid!
     redirect MainController.r(:index)
   end
-
 end
