@@ -25,6 +25,13 @@ body {
   height:20px;
 }
 
+/* Layout / Default
+ * ------------------------- */
+
+#search {
+  padding-bottom:2px;
+}
+
 
 /* Domains/Index
  * ------------------------- */

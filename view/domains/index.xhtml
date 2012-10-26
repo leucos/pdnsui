@@ -1,138 +1,44 @@
 <!-- Page header -->
 <div class="page-header">
-  <h1>
+  <h2>
     Domains
     <small>#{Domain.count} domains in database</small>
-  </h1>
+  </h2>
 
   <div class="btn-toolbar" style="margin-bottom: 10px">
     <div class="btn-group">
       <a class="btn btn" id="add-domain"><i class="icon-plus-sign"></i> Add domain</a>
     </div>
-  </div>
-</div>
-
-<!-- this is the new/edit domain modal form -->
-
-<div class="modal hide fade" id="mod-edit" style="display: none; ">
-  <form class="modal-form form-horizontal" method='POST' action="#{Domains.r(:save)}">
-    <fieldset>
-      <div class="modal-header">
-        <a class="close" data-dismiss="modal">x</a>
-        <h3>Domains</h3>
-      </div>
-      <div class="modal-body">
-        <legend id="mod-edit-operation">New domain</legend>
-
-        <!-- Domain Name -->
-        <div class="control-group">
-          <label class="control-label" for="name">Domain name</label>
-          <div class="controls">
-            <div class="input-append">
-              <input class="span2" name="name" id="mod-edit-name" size="16" type="text" placeholder="whatever">
-            </div>
-            <span class="help-inline">Type you record full name (without trailing dot)</span>
-          </div>
-        </div>
-
-        <!-- Domain Type -->
-        <div class="control-group">
-          <label class="control-label" for="type">Type</label>
-          <div class="controls">
-            <div class="input-append">
-              <select class="span2" name="type" id="mod-edit-type">
-                <option value="MASTER">MASTER</option>
-                <option value="SLAVE">SLAVE</option>
-                <option value="NATIVE">NATIVE</option>
-              </select>
-            </div>
-            <span class="help-inline">Select zone type</span>
-          </div>
-        </div>
-
-        <!-- Domain master (if needed)-->
-        <div class="control-group">
-          <label class="control-label" for="mod-edit-master">Zone master</label>
-          <div class="controls">
-            <div class="input-append">
-              <input class="span2" name="master" id="mod-edit-master" size="16" type="text" placeholder="whatever">
-            </div>
-            <span class="help-inline">Type your zone master IP</span>
-          </div>
-        </div>
-      </div> <!-- modal body -->
-
-      <input type="hidden" id="mod-edit-domainid" name="domain_id" />
-
-      <div class="modal-footer">
-        <button type="submit" id="mod-edit-submit" class="btn">Add domain</button>
-      </div>
-
-    </fieldset>
-
-  </form>
-</div>
-
-<script type="text/javascript">
-
-$("#add-domain").click(function() {
-              $('#mod-edit-operation').html("Add domain");
-              $('#mod-edit-name').attr("value","");
-              $('#mod-edit-text-name').html("");
-              $("#mod-edit-type option[value='MASTER']").attr("selected", "selected");
-              $('#mod-edit-master').attr("value", "");
-              $('#mod-edit-domainid').attr("value","");
-              $('#mod-edit-submit').attr("href","#");
-              $('#mod-edit-submit').html("Create domain");
-              $('#mod-edit').modal('show');
-              });
-</script>
-
-<?r if ! @domains.empty? ?>
-
-<!-- modal popup for domain delete -->
-<div class="modal hide fade in" id="mod-delete">
-  <div class="modal-header">
-    <a class="close" data-dismiss="modal">×</a>
-    <h2 id="mod-delete-name"></h2>
-  </div> <!-- modal header -->
-  <div class="modal-body">
-    <div class="alert alert-error">
-      <p><strong>Warning!</strong></p>
-      This operation will delete the domain and all associated records for <strong id="mod-delete-text-name"></strong>
-      Are you fucking sure you want to do this ?
+    <div class="btn-group pull-right">
+      <a class="btn btn disabled" href="#"><i class="icon-refresh"></i> Notify slaves</a>
     </div>
   </div>
-
-  <div class="modal-footer">
-    <a class="btn btn-primary" href="#" data-dismiss="modal">Cancel</a>
-    <a class="btn btn-danger" id="mod-delete-submit" href="#">Delete domain</a>
-  </div>
 </div>
-<!-- end of modal -->
 
+#{ render_partial :_add_domain }
+
+<?r if ! @domains.empty? ?>
+#{ render_partial :_delete_domain }
 
 <div>
 <table class="table table-striped table-condensed">
   <!-- table headers -->
   <thead>
     <tr>
-      <?r 
+      <?r
       od = request.params['order'] == 'desc' ? 'asc' : 'desc'
       [ 'Name', 'Type', 'Master' ].each do |h|
-        cls =  "btn btn-mini"
         chevron = ""
         sb = h.downcase
         if h.downcase == request.params['sortby']
-          cls += " btn-info" 
-          if request.params['order'] == 'desc' 
+          if request.params['order'] == 'desc'
             chevron = "<i class=\"icon-chevron-up\"></i>"
           else
             chevron = "<i class=\"icon-chevron-down\"></i>"
-          end 
+          end
         end ?>
 
-      <th><a class=\"#{cls}\" href="#{Domains.r(:index, { :sortby => sb, :order => od })}">#{chevron}#{h}</a></th>
+      <th><a href="#{Domains.r(:index, { :sortby => sb, :order => od })}">#{h} #{chevron}</a></th>
 
       <?r end ?>
       <th></th>
@@ -147,12 +53,16 @@ $("#add-domain").click(function() {
       <td style="vertical-align:middle">#{Domains.a(domain.name, :records, domain.id)}</td>
       <td style="vertical-align:middle">#{domain.type}</td>
       <td style="vertical-align:middle">#{domain.master}</td>
-      <td style="vertical-align:middle">
+      <td style="vertical-align:middle;text-align:right;">
 
         <!-- row button group to spin up modal or delete domain -->
         <div class="btn-group">
-          <a class="btn btn-mini" id="edit-domain-#{domain.id}"><i class="icon-edit"></i></a>
-          <a class="btn btn-mini btn-danger" id="del-domain-#{domain.id}" href="#delete#{domain.id}" data-toggle="modal"><i class="icon-remove"></i></a>
+          <a class="btn btn-mini" id="edit-domain-#{domain.id}">
+            <i class="icon-edit"></i> Settings
+          </a>
+          <a class="btn btn-mini btn-danger" id="del-domain-#{domain.id}" href="#delete#{domain.id}" data-toggle="modal">
+            <i class="icon-remove"></i>
+          </a>
         </div>
         <!-- row button end -->
         <script type="text/javascript">
@@ -161,18 +71,45 @@ $("#add-domain").click(function() {
               $('#mod-delete-text-name').html("#{domain.name}");
               $('#mod-delete-submit').attr("href", "#{Domains.r(:delete, domain.id)}");
               $('#mod-delete').modal('show')
-              });
-            $("#edit-domain-#{domain.id}").click(function() {
+          });
+
+          $("#edit-domain-#{domain.id}").click(function() {
               $('#mod-edit-operation').html("Edit #{domain.name}");
               $('#mod-edit-name').attr("value","#{domain.name}");
               $('#mod-edit-text-name').html("#{domain.name}");
-              $("#mod-edit-type option[value='#{domain.type}']").attr("selected", "selected");
+              $("input:radio[value='#{domain.type}']").attr("checked", true);
               $('#mod-edit-master').attr("value", "#{domain.master}");
               $('#mod-edit-domainid').attr("value","#{domain.id}");
               $('#mod-edit-submit').attr("href","#");
-              $('#mod-edit-submit').html("Save domain");
-              $('#mod-edit').modal('show');
+              $('#mod-edit-submit').html("Save changes");
+              if( "#{domain.type}" == "SLAVE" ) {
+                $('#mod-edit-master-box').show();
+              } else {
+                $('#mod-edit-master-box').hide();
+              }
+              /* Depending on the selected radio, either show or hide
+                 the master settings box */
+              $('#mod-edit-type-slave').change(function() {
+                  $('#mod-edit-master-box').show();
               });
+              $('#mod-edit-type-master').change(function() {
+                  $('#mod-edit-master-box').hide();
+              });
+              $('#mod-edit-type-native').change(function() {
+                  $('#mod-edit-master-box').hide();
+              });
+              $('#mod-edit').modal({
+                  backdrop: true,
+                  keyboard: true
+              }).css({
+                  'width': function() {
+                     return  ( $(document).width() * .5 ) + 'px';
+                  },
+                  'margin-left': function () {
+                     return -( $(this).width() / 2 );
+                  }
+              });
+          });
          </script>
        </td>
     </tr>

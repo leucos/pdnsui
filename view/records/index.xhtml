@@ -1,14 +1,13 @@
 <!-- <?r #if logged_in? ?> -->
 <!-- <?r #end ?> -->
-
 <div class="page-header">
-  <h1>
+  <h2>
     #{@record.name}
     <small>from domain <strong><a href="#{Domains.r(:index,@domain.id)}">#{@domain.name}</a></strong></small>
-  </h1>
+  </h2>
   <! -- Print serial from SOA if exists -->
   <?r if @domain.soa.nil? ?>
-  <p><span class="label label-warning">Serial unknown</span></p>
+  <p><span class="label label-warning">Serial unknown or SOA record missing</span></p>
   <?r else ?>
   <p><span class="label label-info">Serial ##{@domain.soa.domain_serial}</span></p>
   <?r end ?>
@@ -22,9 +21,6 @@ CNAME records should bring a list or A, AAAA, PTR, ... (should read RFC 1031/218
 <div id="mod-edit">
   <form class="form-horizontal" method='POST' action="#{Records.r(:save)}">
     <fieldset>
-        <h3>#{@domain.name}</h3>
-        <legend id="mod-edit-operation">Record content</legend>
-
         <!-- Record Name -->
         <div id="cg-recordname" class="control-group">
           <label class="control-label" for="name">Entry name</label>

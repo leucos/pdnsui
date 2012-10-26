@@ -1,33 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>#{@title}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
 
-    <!-- Bootstrap css -->
-    #{css('bootstrap')}
-
-    <style type="text/css">
-      body {
-        padding-top: 60px;
-        padding-bottom: 40px;
-      }
-      .sidebar-nav {
-        padding: 9px 0;
-      }
-    </style>
+    #{css('bootstrap.no-icons.min')}
+    #{css('font-awesome')}
+    #{css('jquery-ui')}
+    #{css('style')}
+    <!--[if IE 7]>
+      #{css('font-awesome-ie7.css')}
+    <![endif]-->
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    
-    <script src="http://code.jquery.com/jquery-1.8.2.js"></script>
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css">
-    <script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
+    #{js('jquery')}
+    #{js('jquery-ui')}
+
+    <style type="text/css">
+      .sidebar-nav {
+        padding: 9px 0;
+      }
+    </style>
 
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="/img/favicon.ico">
@@ -38,7 +38,7 @@
 
   <body>
 
-    <div class="navbar navbar-fixed-top">
+    <div class="navbar navbar-fixed-top navbar-inverse">
       <div class="navbar-inner">
         <div class="container-fluid">
           <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -46,95 +46,71 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#{PDNSui::URL}">PDNSui</a>
+          <a class="brand" href="#{Domains.route}">PDNSui</a>
           <div class="nav-collapse">
-            <ul class="nav">
-              <?r if @context == :domains ?>
-              <li><a href="/">Home</a></li>
-              <li class="active"><a href="#{Domains.route}">Domains</a></li> 
-              <?r else ?>
-              <li class="active"><a href="/">Home</a></li>
-              <li><a href="#{Domains.route}">Domains</a></li> 
-              <?r end ?>
-              <?r if logged_in? and user.super_powers? ?>
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" 
-                  data-toggle="dropdown">Administration <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a href="#{Utils.r(:notify_slaves)}">Notify Slaves</a></li> 
-                  <li class="divider"></li>
-                  <li><a href="#{Users.r(:index)}">Users</a></li>
-                </ul>
-              </li>
-              <?r end ?>
-              <form class="navbar-search">
-                <input id="search" type="text" class="search-query" placeholder="Search" data-provide="typeahead" data-source="[]" maxlength="30" autocomplete="off">
-              </form>
-              <li><a href="#about">About</a></li>
-            </ul>
             <?r if logged_in? ?>
-            <p class="navbar-text pull-right">Logged in as <a href="#">#{user.email}</a> - #{Users.a('Logout', :logout)}</p>
+              <ul class="nav">
+                <?r if @context == :domains ?>
+                  <li class="active"><a href="#{Domains.route}">Domains</a></li> 
+                <?r else ?>
+                  <li><a href="#{Domains.route}">Domains</a></li> 
+                <?r end ?>
+                  <form class="navbar-search">
+                    <input id="search" type="text" class="search-query" placeholder="Search Records" data-provide="typeahead" data-source="[]" maxlength="30" autocomplete="off">
+                  </form>
+              </ul>
+              <?r end ?>
+              <ul class="pull-right nav">
+                <li class="navbar-text">#{user.email}</li>
+                <?r if logged_in? and user.super_powers? ?>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" 
+                      data-toggle="dropdown"><i class="icon-reorder"></i>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a href="#{Utils.r(:notify_slaves)}">Notify Slaves</a></li> 
+                    <li><a href="#{Users.r(:index)}">User Manager</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/about">About</a></li>
+                    <li>#{Users.a('Logout', :logout)}</li>
+                  </ul>
+               </li>
+               </ul>
             <?r else ?>
-            <p class="navbar-text pull-right">#{Users.a('Login',:login)}</p>
+              <p class="navbar-text pull-right">#{Users.a('Login',:login)}</p>
             <?r end ?>
           </div><!--/.nav-collapse -->
         </div>
       </div>
     </div>
 
-   <div class="container-fluid">
-      <div class="row-fluid">
-        <?r if logged_in? ?>
-        <!-- sidebar -->
-        <div class="span2">
-          <div class="well sidebar-nav">
-            #{generate @domain}
-          </div><!--/.well -->
-        </div><!--/span-->
-        <!-- sidebar -->
-        <?r end ?>
-
-        <div class="span9">
-
+   <div class="container">
           <!-- ####################################################### -->
 				  <?r [:success, :error, :info].each do |type| ?>
             <?r if flash[type] ?>
-
-					<div class="alert alert-block alert-#{type} fade in">
-            <a class="close" data-dismiss="alert" href="#">×</a>
-            <h4 class="alert-heading">#{type.capitalize}</h4>
-            <p>#{flash[type].capitalize}</p>
-          </div>
-
+					    <div id="messenger" class="alert alert-#{type} fade in">
+                <a class="close" data-dismiss="alert" href="#">×</a>
+                <strong>#{type.capitalize}</strong>: #{flash[type].capitalize}
+              </div>
             <?r end ?>
 					<?r end ?>
           <!-- ####################################################### -->
 
           #{@content}
 
-        </div><!--/span-->
-      </div><!--/row-->
-
       <hr>
-
       <footer class="centered">
       <div style="text-align: center;">
-        PDNSui powered by <a href="http://ramaze.net">Ramaze</a> -
-        Layout and CSS from <a href="http://twitter.github.com">Twitter Bootstrap</a> -
-        Favicon from <a href="http://glyphicons.com/">glyphicons.com</a> -
-        Apple touch icon from <a href="http://findicons.com/search/leaf">Findicons</a>
+        Powered by <a href="https://github.com/leucos/pdnsui">PDNSui</a>
       </div>
       </footer>
 
-    </div><!--/.fluid-container-->
-
-    <!-- Github ribbon -->
-    <!-- <a href="http://github.com/you"><img style="position: absolute; z-index: 2000; top: 0; right: 0; border: 0;" src="https://a248.e.akamai.net/assets.github.com/img/7afbc8b248c68eb468279e8c17986ad46549fb71/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub"></a> -->
+    </div>
 
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+
     <?r if ENV['RACK_ENV'] == 'live' ?>
       #{js('bootstrap.min')}
       #{js('pdnsui')}
