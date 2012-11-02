@@ -2,13 +2,20 @@
 # Controller for Domains
 #
 class Domains < MainController
+  helper :restify, :user
 
   before_all do
     # Context helps the default layout highlighting the good entry in the navbar
+    Ramaze::Log.info("Here")
+    redirect Users.r(:login) unless logged_in?
     @context=:domains
   end
 
-  def index
+
+  def index(arg=nil)
+    # If we have an arg, lets display a list of records for the domain
+    redirect Domains.r(:records, arg) if arg
+
     @title = 'Domains'
 
     # Get params, filtering ou nil and turning them to symbol
@@ -51,7 +58,7 @@ class Domains < MainController
       operation = "create"
     end
 
-    model_wrap(operation, data['name']) do
+    api_model_wrap(operation, data['name']) do
       @domain.update(data)
     end
 
@@ -68,7 +75,7 @@ class Domains < MainController
       flash[:error] = "Sorry, the domain ID '%s' doesn\'t exist" % id
       redirect Domains.r(:index)
     else
-      model_wrap("delete", d.name) do
+      api_model_wrap("delete", d.name) do
         d.destroy
       end
     end

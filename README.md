@@ -47,6 +47,21 @@ cp config/database.rb.sample config/database.rb
 vim config/database.rb
 ```
 
+* Create the users database
+
+The users database is different thatn the powerdns database.
+
+```bash
+rake db:migrate
+```
+
+You might want to seed the database with the first user (admin/1234) if 
+runing for the first time :
+
+```bash
+rake db:seed
+```
+
 * Start the application 
 
 ```bash
@@ -61,6 +76,23 @@ MODE=DEV ramaze start -s thin
 _Note_ : you don't need to have powerdns on the machine to try this out.
 However, advanced features (slave notifications, dns based specs) will
 require a locally installed powerdns.
+
+Using the search field
+----------------------
+
+The seach field is rather nice. You can combine filtering on domains, record name, record content and record type:
+
+* `@<domain>` will restrict search to a single domain, e.g. `@github.com`
+* `*<type>` will restrict search to a single type, e.g. `:mx`
+* `:<id>` will retrieve a specific record ID
+* `=<text>` will restrict search to records having 'test' in their `content` field
+* `<text>` will search for 'text' in the record's name
+
+For instance, typing `@github.com *mx =2 goog` will search for all MX records 
+in the `github.com` domain, containing `goog` in their name, and having `2` in 
+their content. As today, if you would handle github.com nameserver with 
+PDNSui, it would return `ALT2.ASPMX.L.GOOGLE.com.` and `ASPMX2.GOOGLEMAIL.com.`
+.
 
 Specs (a.k.a. Tests)
 --------------------

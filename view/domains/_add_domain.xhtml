@@ -1,0 +1,101 @@
+<!-- Modal From: Add a new or edit a domain -->
+<div class="modal hide fade" id="mod-edit">
+  <form class="modal-form form-horizontal" method='POST' action="#{Domains.r(:save)}">
+    <fieldset>
+      <div class="modal-header">
+        <a class="close" data-dismiss="modal">x</a>
+        <h3>Domain Properties</h3>
+      </div>
+      <div class="modal-body">
+        <!-- Domain Name -->
+        <div class="control-group">
+          <label class="control-label" for="name">Domain Name</label>
+          <div class="controls">
+            <div class="input-append">
+              <input name="name" id="mod-edit-name" size="16" type="text" placeholder="example.com">
+            </div>
+          </div>
+        </div>
+
+        <!-- Zone/Repliction Type -->
+        <div class="control-group">
+          <label class="control-label" for="type">Zone Type</label>
+          <div class="controls">
+            <div class="input-append mod-edit-type">
+              <label>
+                <input type="radio" name="type" value="MASTER" id="mod-edit-type-master">
+                <strong>Master</strong>
+                <span class="help-block">Send out notifications about zone changes to slaves.</span>
+              </label>
+              <label>
+                <input type="radio" name="type" value="SLAVE" id="mod-edit-type-slave">
+                <strong>Slave</strong>
+                <span class="help-block">Retrive records from master, store in database.</span>
+              </label>
+              <label>
+                <input type="radio" name="type" value="NATIVE" id="mod-edit-type-native">
+                <strong>Native</strong>
+                <span class="help-block">Rely on database replication, don't replicate via DNS.</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Zone master (if needed)-->
+        <div class="control-group hide" id="mod-edit-master-box">
+          <label class="control-label" for="mod-edit-master">Zone master</label>
+          <div class="controls">
+            <div class="input-append">
+              <input name="master" id="mod-edit-master" size="16" type="text" placeholder="1.2.3.4">
+            </div>
+            <span class="help-inline">Ip Address of the master host, which PDNS should replicate with.</span>
+          </div>
+        </div>
+      </div> <!-- modal body -->
+
+      <input type="hidden" id="mod-edit-domainid" name="domain_id" />
+
+      <div class="modal-footer">
+        <button type="submit" id="mod-edit-submit" class="btn btn-success">Add domain</button>
+      </div>
+
+    </fieldset>
+
+  </form>
+</div>
+
+<script type="text/javascript">
+$("#add-domain").click(function() {
+    $('#mod-edit-operation').html("Add domain");
+    $('#mod-edit-name').attr("value","");
+    $('#mod-edit-text-name').html("");
+    $("#mod-edit-type option[value='MASTER']").attr("selected", "selected");
+    $('#mod-edit-master').attr("value", "");
+    $('#mod-edit-domainid').attr("value","");
+    $('#mod-edit-submit').attr("href","#");
+    $('#mod-edit-submit').html("Save domain");
+    /* Depending on the selected radio, either show or hide
+       the master box */
+    $('#mod-edit-type-slave').change(function() {
+        $('#mod-edit-master-box').show();
+    });
+    $('#mod-edit-type-master').change(function() {
+        $('#mod-edit-master-box').hide();
+    });
+    $('#mod-edit-type-native').change(function() {
+        $('#mod-edit-master-box').hide();
+    });
+    $('#mod-edit').modal({
+        backdrop: true,
+        keyboard: true
+    }).css({
+        'width': function() { 
+           return  ( $(document).width() * .5 ) + 'px';  
+        },
+        'margin-left': function () { 
+           return -( $(this).width() / 2 ); 
+        }
+    });
+});
+</script>
+

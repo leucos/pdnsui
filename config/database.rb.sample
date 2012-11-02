@@ -14,28 +14,19 @@ require 'sequel'
 # (see http://sequel.rubyforge.org/rdoc/files/doc/sharding_rdoc.html)
 #
 
-# For future use
-# META=Sequel.sqlite(__DIR__('meta.sqlite'))
-
 case Ramaze.options.mode
 when :spec
+  AUTH = Sequel.sqlite('db/auth-spec.db')
   DB = Sequel.mysql2(
-    'powerdns',
-    :user     => 'someuser', 
-    :password => 'somepass')
+    'powerdns-spec', 
+    :user=>'root', 
+    :password=>'')
 when :dev
+  AUTH = Sequel.sqlite('db/auth-dev.db')
   DB = Sequel.mysql2(
-    'powerdns', 
-    :host     => 'db.dev.example.com',
-    :user     => 'someuser', 
-    :password => 'somepass')
-when :live
-  DB = Sequel.mysql2(
-    'powerdns', 
-    :host     => 'db.example.com',
-    :user     => 'someuser', 
-    :password => 'somepass')
-when :live
+    'powerdns-dev', 
+    :user=>'root', 
+    :password=>'')
 else
   puts "No database configured for #{Ramaze.options.mode}"
   exit

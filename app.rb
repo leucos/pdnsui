@@ -13,8 +13,11 @@ Ramaze.options.roots = [__DIR__]
 # Require environnemet settings
 require __DIR__('config/environment')
 require __DIR__('config/database')
+require __DIR__('config/dns')
+require __DIR__('config/preferences')
 
 # Initialize controllers and models
 require __DIR__('helper/init')
 require __DIR__('model/init')
 require __DIR__('controller/init')
+require __DIR__('api/init')

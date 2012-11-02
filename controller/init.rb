@@ -4,7 +4,8 @@
 
 class Controller < Ramaze::Controller
   layout :default
-  helper :xhtml, :paginate, :sidebar, :model_exception_wrapper
+  helper :xhtml, :paginate, :sidebar
+
   engine :etanni
 
   trait :paginate => {
@@ -21,6 +22,7 @@ end
 #  end
 #
 require __DIR__('main')
+require __DIR__('users')
 require __DIR__('domains')
 require __DIR__('records')
 require __DIR__('utils')

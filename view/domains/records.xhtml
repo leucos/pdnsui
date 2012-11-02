@@ -2,164 +2,47 @@
 <!-- <?r #end ?> -->
 
 <div class="page-header">
-  <h1>
-    #{@domain.name}
+  <h2>
+    <a href="/domains">Domains</a> / #{@domain.name}
     <small>#{Domain[@domain.id].records_dataset.count} records</small>
-  </h1>
-  <! -- Print serial from SOA if exists -->
-  <?r if @domain.soa.nil? ?>
-  <p><span class="label label-warning">Serial unknown</span></p>
-  <?r else ?>
-  <p><span class="label label-info">Serial ##{@domain.soa.domain_serial}</span></p>
-  <?r end ?>
-
-
-<div class="btn-toolbar" style="margin-bottom: 10px">
-  <div class="btn-group">
-    <a class="btn btn" href="#" id="new-record"><i class="icon-plus-sign"></i> Add record</a>
-  </div>
-  <div class="btn-group">
-    <a class="btn btn-warning" href="#{Domains.r(:bump_serial, @domain.id)}"><i class="icon-step-forward icon-white"></i> Bump Serial</a>
-    <a class="btn btn disabled" href="#"><i class="icon-refresh"></i> Notify slaves</a>
-  </div>
-  <div class="btn-group">
-    <a class="btn btn-primary disabled" href="#"><i class="icon-eye-open icon-white"></i> Check</a>
-    <a class="btn btn-primary dropdown-toggle disabled" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-    <ul class="dropdown-menu">
-      <li><a href="#"><i class="icon-info-sign"></i> Whois</a></li>
-      <li><a href="#"><i class="icon-question-sign"></i> Query slaves</a></li>
-      <li><a href="#"><i class="icon-exclamation-sign"></i> Query random</a></li>
-      <li><a href="#"><i class="icon-list-alt"></i> Statistics</a></li>
-      <li class="divider"></li>
-      <li><a href="#"><i class="icon-screenshot"></i> Consistency check</a></li>
-    </ul>
+  </h2>
+  <div class="btn-toolbar" style="margin-bottom: 10px">
+    <div class="btn-group pull-right" style="margin-left:10px;">
+      <a class="btn" href="#"><i class="icon-eye-open"></i> Check</a>
+      <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+      <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+        <li><a href="#"><i class="icon-info-sign"></i> Whois</a></li>
+        <li><a href="#"><i class="icon-question-sign"></i> Query slaves</a></li>
+        <li><a href="#"><i class="icon-exclamation-sign"></i> Query random</a></li>
+        <li><a href="#"><i class="icon-list-alt"></i> Statistics</a></li>
+        <li class="divider"></li>
+        <li><a href="#"><i class="icon-screenshot"></i> Consistency check</a></li>
+      </ul>
+    </div>
+    <div class="btn-group pull-right">
+      <a class="btn btn-warning" style="color:#FFF;" href="#{Domains.r(:bump_serial, @domain.id)}"><i class="icon-step-forward icon-white"></i> Bump Serial</a>
+      <a class="btn btn disabled" href="#"><i class="icon-refresh"></i> Notify slaves</a>
+    </div>
   </div>
 </div>
-</div>
 
-<script type="text/javascript">
-  $("#new-record").click(function() {
-    $('#mod-edit-operation').html("New record");
-    $('#mod-edit-recordname').attr("value","");
-    $("#mod-edit-recordtype option[value='A']").attr("selected", "selected");
-    $('#mod-edit-recordcontent').attr("value", "");
-    $('#mod-edit-recordid').attr("value","");
-    $('#mod-edit-recordsubmit').attr("href","#");
-    $('#mod-edit-recordsubmit').html("Create record");
-    $('#mod-edit').modal('show');
-  });
-</script>
-
+<br/>
 <!-- this is the new/edit record form
 For best effect, it should adapt according to the record type
 For instance, LOC records should bring a map
 CNAME records should bring a list or A, AAAA, PTR, ... (should read RFC 1031/2181) -->
 
-<div class="modal hide fade" id="mod-edit" style="display: none; ">
-  <form class="modal-form form-horizontal" method='POST' action="#{Records.r(:save)}">
-    <fieldset>
-      <div class="modal-header">
-        <a class="close" data-dismiss="modal">×</a>
-        <h3>#{@domain.name}</h3>
-      </div>
-      <div class="modal-body">
-        <legend id="mod-edit-operation">New record</legend>
-
-        <!-- Record Name -->
-        <div id="cg-recordname" class="control-group">
-          <label class="control-label" for="name">Entry name</label>
-          <div class="controls">
-            <div class="input-append">
-              <input class="span2" name="name" id="mod-edit-recordname" size="16" type="text" placeholder="whatever">
-            </div>
-            <span class="help-inline" id="in-recordhelp">Type your record name</span>
-          </div>
-        </div>
-
-        <!-- Record Type -->
-        <div class="control-group">
-          <label class="control-label" for="type">Type</label>
-          <div class="controls">
-            <div class="input-append">
-              <select class="span2" id="mod-edit-recordtype" name="type">
-                <option value="A">A</option>
-                <option value="AAAA">AAAA</option>
-                <option value="CNAME">CNAME</option>
-                <option value="MX">MX</option>
-                <option value="NS">NS</option>
-                <option value="PTR">PTR</option>
-                <option value="SOA">SOA</option>
-                <option value="TXT">TXT</option>
-              </select>
-            </div>
-            <span class="help-inline">Select record type</span>
-          </div>
-        </div>
-
-        <!-- Record Content -->
-        <div class="control-group">
-          <label class="control-label" for="content">Content</label>
-          <div class="controls">
-            <div class="input-append">
-              <input class="span2" name="content" id="mod-edit-recordcontent" size="16" type="text" placeholder="whatever">
-            </div>
-            <span class="help-inline">Type you record content</span>
-          </div>
-        </div>
-
-        <!-- Record TTL -->
-        <div class="control-group">
-          <label class="control-label" for="ttl">TTL</label>
-          <div class="controls">
-            <div class="input-append">
-              <input class="span2" name="ttl" id="mod-edit-recordttl" size="6" type="text" placeholder="86400">
-              <!--              <span class="add-on">#{@domain.name}</span>-->
-            </div>
-            <span class="help-inline">Type a TTL</span>
-          </div>
-        </div>
-
-        <!-- Record Priority -->
-        <div class="control-group">
-          <label class="control-label" for="prio">Priority</label>
-          <div class="controls">
-            <div class="input-append">
-              <input class="span2" name="prio" id="mod-edit-recordprio" size="16" type="text" placeholder="10">
-              <!-- <span class="add-on">#{@domain.name}</span> -->
-            </div>
-            <span class="help-inline">Type a priority (lower numbers give higher priority)</span>
-          </div>
-        </div>
-
-        <input type="hidden" id="mod-edit-recordid" name="record_id" value="">
-        <input type="hidden" name="domain_id" value="#{@domain.id}">
-
-      </div> <!-- modal-body -->
-
-      <div class="modal-footer">
-        <button type="submit" id="mod-edit-recordsubmit" class="btn">Add record</button>
-      </div>
-
-    </fieldset>
-  </form>
-</div>
-
-<?r if ! @records.empty? ?>
-
-
 <!-- modal popup for record delete -->
-<div class="modal hide fade in" id="mod-delete">
+<div class="modal hide fade in error" id="mod-delete">
   <div class="modal-header">
     <a class="close" data-dismiss="modal">×</a>
-    <h2 id="mod-delete-name"></h2>
+    <h3 id="mod-delete-name"></h3>
   </div> <!-- modal header -->
   <div class="modal-body">
-    <div class="alert">
       <p><strong>Warning!</strong></p>
       This operation will delete the <strong id="mod-delete-text-name"></strong> 
       <span id="mod-delete-rec-type"></span> record.
-      Are you x sure you want to do this ?
-    </div>
+      Are you sure you want to do this ?
   </div>
   <div class="modal-footer">
     <a class="btn btn-primary" href="#" data-dismiss="modal">Cancel</a>
@@ -168,20 +51,16 @@ CNAME records should bring a list or A, AAAA, PTR, ... (should read RFC 1031/218
 </div>
 <!-- end of modal -->
 
-
 <div>
-
-  <table class="table table-striped table-condensed">
+  <table class="table table-striped table-condensed records">
     <thead>
       <tr>
         <?r 
         od = request.params['order'] == 'desc' ? 'asc' : 'desc'
-        [ 'Name', 'Type', 'Content', 'TTL', 'Prio' ].each do |h|
-          cls =  "btn btn-mini"
+        [ 'Name', 'Type', 'Prio', 'Content', 'TTL' ].each do |h|
           chevron = ""
           sb = h.downcase
           if h.downcase == request.params['sortby']
-            cls += " btn-info" 
             if request.params['order'] == 'desc' 
               chevron = "<i class=\"icon-chevron-up\"></i>"
             else
@@ -189,7 +68,7 @@ CNAME records should bring a list or A, AAAA, PTR, ... (should read RFC 1031/218
             end 
           end ?>
 
-          <th><a class=\"#{cls}\" href="#{Domains.r(:records, @domain.id, { :sortby => sb, :order => od })}">#{chevron}#{h}</a></th>
+          <th class="records-head-#{sb}"><a href="#{Domains.r(:records, @domain.id, { :sortby => sb, :order => od })}">#{h} #{chevron}</a></th>
 
         <?r end ?>
         <th></th>
@@ -197,30 +76,111 @@ CNAME records should bring a list or A, AAAA, PTR, ... (should read RFC 1031/218
     </thead>
     <tbody>
 
+      <tr class="records-form">
+        <form method='POST' action="#{Records.r(:save)}">
+          <td class="records-input-name">
+            <input name="name" id="mod-edit-recordname" type="text" placeholder="eg. www or leave empty" />
+          </td>
+          <td class="records-input-type">
+            <select id="mod-edit-recordtype" name="type">
+              <option value="A">A</option>
+              <option value="CNAME">CNAME</option>
+              <option value="AAAA">AAAA</option>
+              <option value="PTR">PTR</option>
+              <option value="MX">MX</option>
+              <option value="NS">NS</option>
+              <option value="TXT">TXT</option>
+              <option value="SOA">SOA</option>
+            </select>
+          </td>
+          <td class="records-input-prio">
+            <input name="prio" id="mod-edit-recordprio" type="text" placeholder="-" disabled="disabled">
+          </td>
+          <td class="records-input-content">
+            <input name="content" id="mod-edit-recordcontent" type="text" placeholder="eg. 192.0.43.10, web01.example.com"/>
+          </td>
+          <td class="records-input-ttl">
+            <input name="ttl" id="mod-edit-recordttl" type="text" value="360" />
+          </td>
+          <td class="records-input-action">
+            <button type="reset"  id="mod-edit-recordreset"  class="btn">Clear</button>
+            <button type="submit" id="mod-edit-recordsubmit" class="btn btn-success">Save</button>
+          </td>
+          <input type="hidden" id="mod-edit-recordid" name="record_id" value="">
+          <input type="hidden" name="domain_id" value="#{@domain.id}">
+        </form>
+      </tr>
+<?r if @records.empty? ?>
+    <tr>
+      <td class="alert" colspan="6" style="text-align:center;padding:20px;">
+        This zone is currently empty, no records were found.<br/>
+        Fill out the form above to add a new record.
+      </td>
+    </tr>
+    </table>
+    </div>
+<?r else ?>
       <?r @records.each do |record| ?>
       <tr>
-        <td style="vertical-align:middle">#{record.name}</td>
-        <td style="vertical-align:middle">#{record.type}</td>
-        <td style="vertical-align:middle">#{record.content}</td>
-        <td style="vertical-align:middle">#{record.ttl}</td>
-        <td style="vertical-align:middle">#{record.prio}</td>
-        <td style="vertical-align:middle">
-
+        <td class="records-value-name">#{record.name}</td>
+        <td class="records-value-type">#{record.type}</td>
+        <td class="records-value-prio">#{record.prio}</td>
+        <?r if record.type == "SOA" ?>
+        <td class="records-value-content records-value-content-soa">
+          #{@domain.soa.domain_ns} #{@domain.soa.domain_email}<br/>
+          <span class="label label-info">serial: #{@domain.soa.domain_serial}</span>
+          <span class="label">refresh: #{@domain.soa.domain_refresh}</span>
+          <span class="label">retry: #{@domain.soa.domain_retry}</span>
+          <span class="label">expiry: #{@domain.soa.domain_expiry}</span>
+          <span class="label">minimum: #{@domain.soa.domain_minimum}</span>
+        </td>
+        <?r else ?>
+        <td class="records-value-content">#{record.content}</td>
+        <?r end ?>
+        <td class="records-value-ttl">#{record.ttl}</td>
+        <td class="records-value-action">
           <div class="btn-toolbar" style="margin-bottom: -1px">
             <div class="btn-group">
-              <a class="btn btn-mini" id="edit-record-#{record.id}" href="#"><i class="icon-edit"></i></a>
-              <a class="btn btn-mini btn-danger" id="del-record-#{record.id}" href="#" data-toggle="modal">
+              <?r if record.type == "A" ?>
+              <a class="btn btn-mini" id="a2ptr-record-#{record.id}" href="#" rel="tooltip" title="Create PTR record from this A"><i class="icon-retweet"></i></a>
+              <?r elsif record.type == "PTR" ?>
+              <a class="btn btn-mini" id="ptr2a-record-#{record.id}" href="#" rel="tooltip" title="Create A record from this PTR"><i class="icon-retweet"></i></a>
+              <?r end ?>
+              <a class="btn btn-mini" id="edit-record-#{record.id}" href="#" rel="tooltip" title="Edit record"><i class="icon-edit"></i></a>
+              <a class="btn btn-mini btn-danger" id="del-record-#{record.id}" href="#" rel="tooltip" data-toggle="modal"  title="Delete record">
                 <i class="icon-remove"></i>
               </a>
             </div>
           </div>
           <script type="text/javascript">
+            $(function() {
+              $('a[rel="tooltip"]').tooltip();
+            });
+
+            // How can we change this ?
+            // This generates quite a bunch of code
             $("#del-record-#{record.id}").click(function() {
               $('#mod-delete-name').html("#{record.name}");
               $('#mod-delete-text-name').html("#{record.name}");
               $('#mod-delete-submit').attr("href", "#{Records.r(:delete, record.id)}");
               $('#mod-delete-rec-type').html("#{record.type}");
               $('#mod-delete').modal('show');
+              });
+            $("#a2ptr-record-#{record.id}").click(function() {
+              $('#mod-edit-operation').html("Create #{record.name}");
+              $('#mod-edit-recordname').attr("value","#{record.content.split('.').reverse.join('.')}.in-addr.arpa");
+              $("#mod-edit-recordtype option[value='PTR']").attr("selected", "selected");
+              $('#mod-edit-recordcontent').attr("value", "#{record.name}");
+              $('#mod-edit-recordttl').attr("value", "#{record.ttl}");
+              $('#mod-edit-recordprio').attr("value", "#{record.prio}");
+              $('#mod-edit-recordid').attr("value","");
+              $('#mod-edit-recordsubmit').attr("href","#");
+
+              // need to find a way to get best domain here...
+              $('#mod-edit-domainid').attr("value","");       
+
+              $('#mod-edit-recordsubmit').html("Add");
+              $('#mod-edit').modal('show');
               });
             $("#edit-record-#{record.id}").click(function() {
               $('#mod-edit-operation').html("Edit #{record.name}");
@@ -231,9 +191,11 @@ CNAME records should bring a list or A, AAAA, PTR, ... (should read RFC 1031/218
               $('#mod-edit-recordprio').attr("value", "#{record.prio}");
               $('#mod-edit-recordid').attr("value","#{record.id}");
               $('#mod-edit-recordsubmit').attr("href","#");
-              $('#mod-edit-recordsubmit').html("Save record");
+              $('#mod-edit-recordsubmit').html("Save");
               $('#mod-edit').modal('show');
               });
+
+            $("#mod-edit-recordname").focus();
           </script>
         </td>
       </tr>
@@ -244,19 +206,19 @@ CNAME records should bring a list or A, AAAA, PTR, ... (should read RFC 1031/218
 
 </div>
 
-<div>
   #{@records.navigation}
-</div>
-
-<?r else ?>
-
-<div class="row-fluid">
-  <div class="alert">
-    No records found
-  </div>
-</div>
-
 <?r end ?>
 
-
+<script type="text/javascript">
+  $("#mod-edit-recordtype").change(function() {
+    var currentType = $("#mod-edit-recordtype").val();
+    if( currentType == "MX" ) {
+      $("#mod-edit-recordprio").prop("disabled", false);
+      $("#mod-edit-recordprio").prop("placeholder", "10");
+    } else {
+      $("#mod-edit-recordprio").prop("disabled", true);
+      $("#mod-edit-recordprio").prop("placeholder", "-");
+    }
+  });
+</script>
 

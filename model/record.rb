@@ -1,7 +1,10 @@
 class Record < Sequel::Model
   many_to_one :domain
   plugin :validation_helpers
+  plugin :json_serializer
   plugin :composition
+
+  self.db = DB
 
   # We can only have one SOA per domain
   # Also, we can not have exactly the same records

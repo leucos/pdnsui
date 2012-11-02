@@ -10,10 +10,12 @@ task :bacon do
   SimpleCov.command_name 'bacon'
   SimpleCov.start do
     add_group "Models", "model/"
+    add_group "API", "api/"
     add_group "Controllers", "controller/"
     add_group "Helpers", "helper/"
+    add_filter "config/"
     add_filter "spec/"
-    add_filter "config"
+    add_filter "vendor/"
   end if ENV["COVERAGE"] 
 
   require File.expand_path('spec/init.rb')
