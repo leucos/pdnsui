@@ -1,0 +1,20 @@
+<!-- modal popup for domain delete -->
+<div class="modal hide fade in" id="mod-delete">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h2 id="mod-delete-name"></h2>
+  </div> <!-- modal header -->
+  <div class="modal-body">
+    <div class="alert alert-error">
+      <p><strong>Warning!</strong></p>
+      This operation will delete the domain and all associated records for <strong id="mod-delete-text-name"></strong>
+      Are you fucking sure you want to do this ?
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <a class="btn btn-primary" href="#" data-dismiss="modal">Cancel</a>
+    <a class="btn btn-danger" id="mod-delete-submit" href="#">Delete domain</a>
+  </div>
+</div>
+<!-- end of modal -->
