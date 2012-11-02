@@ -1,9 +1,10 @@
 
-<h2>#{@subtitle}</h2>
-
-<p class="lead">
-Keep an eye on these guys
-</p>
+<div class="page-header">
+  <h2>#{@subtitle}</h2>
+  <p class="lead">
+  Keep an eye on these guys
+  </p>
+</div>
 
 Well, this page is totally unplugged. It's just a mockup.
 <div class="accordion" id="accordion">
@@ -13,7 +14,8 @@ Well, this page is totally unplugged. It's just a mockup.
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" id="accordion-toggle-#{u.id}" data-toggle="collapse" data-parent="#accordion" href="#collapse-#{u.id}">
-        <img src="#{gravatar(u.email, :size => 40)}" /> #{u.email}
+        <img src="#{gravatar(u.email, :size => 30)}" /> 
+        #{u.email}
       </a>
     </div>
     <div id="collapse-#{u.id}" class="accordion-body collapse">
