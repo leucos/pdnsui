@@ -17,6 +17,11 @@ _This software is *very* alpha. You definitively shouldn't use it on
 production servers yet ! Don't come to me if your production DNS
 database is trashed !_
 
+Prereqs
+-------
+
+You need Ruby 1.9.3+ for this to work.
+
 Installing
 ----------
 
@@ -43,13 +48,15 @@ mysql powerdns-test -p -u root < misc/powerdns.mysql
 * Configure the database
 
 ```bash
-cp config/database.rb.sample config/database.rb
+cp config/database.rb.sample-{mysql,pgsql} config/database.rb
 vim config/database.rb
 ```
 
+
 * Create the users database
 
-The users database is different thatn the powerdns database.
+The users database is different than the powerdns database. Users are stored in a separate sqlite
+ database.
 
 ```bash
 rake db:migrate
@@ -121,7 +128,7 @@ BACON_MUTE=yup rake
 Planned features
 ----------------
 
-* Write the _Planned Features_ section in README
+* Write the _Planned Features_ section in README.md
 
 Contributing to pdnsui
 ----------------------
