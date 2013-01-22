@@ -1,0 +1,34 @@
+require 'sequel'
+
+#
+# Database configuration
+#
+# You can do whatever you want here, as long as you end up with a 'DB' instance
+#
+# Some advices though :
+#
+# - you can select different DB according to your running mode
+# (spec, dev, live, see environment.rb)
+#
+# - you can use R/W splitting, sharding, etc...
+# (see http://sequel.rubyforge.org/rdoc/files/doc/sharding_rdoc.html)
+#
+
+case Ramaze.options.mode
+when :spec
+  AUTH = Sequel.sqlite('db/auth-spec.db')
+  DB = Sequel.mysql2(
+    'powerdns-spec', 
+    :user=>'root', 
+    :password=>'')
+when :dev
+  AUTH = Sequel.sqlite('db/auth-dev.db')
+  DB = Sequel.postgres(
+    'pdns', 
+    :host=>'localhost',
+    :user=>'pdns', 
+    :password=>'myultrasecretpwd')
+else
+  puts "No database configured for #{Ramaze.options.mode}"
+  exit
+end
