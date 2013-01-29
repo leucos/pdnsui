@@ -23,4 +23,5 @@ group :development do
     gem 'bluecloth'
     gem 'rack-test'
     gem 'nokogiri'
+    gem 'debugger'
 end
