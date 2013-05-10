@@ -4,4 +4,4 @@ require 'sequel'
 # Database configuration for travis-ci only
 #
 
-DB = Sequel.mysql2('powerdnsi-spec')
+DB = Sequel.mysql2('powerdns-spec')
