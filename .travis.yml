@@ -8,7 +8,7 @@ before_install:
 
 before_script:
   - mysql -e 'create database `powerdns-spec`;'
-  - mysql powerdns_spec < misc/powerdns.mysql
+  - mysql powerdns-spec < misc/powerdns.mysql
   - cp config/database.rb.travis config/database.rb
 
 #script: "bundle exec rake"
