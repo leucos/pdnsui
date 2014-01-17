@@ -35,7 +35,6 @@ when :live
     :host     => 'db.example.com',
     :user     => 'someuser', 
     :password => 'somepass')
-when :live
 else
   puts "No database configured for #{Ramaze.options.mode}"
   exit
