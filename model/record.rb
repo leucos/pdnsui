@@ -6,14 +6,8 @@ class Record < Sequel::Model
 
   self.db = DB
 
-  # We can only have one SOA per domain
-  # Also, we can not have exactly the same records
   def validate
-    if type == 'SOA'
-      validates_unique([:domain_id, :type]) 
-    else
-      validates_unique([:domain_id, :name, :type, :content])
-    end
+    validates_unique([:domain_id, :name, :type, :content])
   end
 
   def before_save
